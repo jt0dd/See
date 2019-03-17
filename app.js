@@ -28,10 +28,6 @@ new DataSet("letter-mini", 150, data => {
   }
   console.log('Built training set', trainingSet);
   net.train(trainingSet);
-  console.log("[1, 0] -> [1] ->", );
-  console.log("[0, 1] -> [1] ->", Math.round(net.run([0, 1])));
-  console.log("[0, 0] -> [0] ->", Math.round(net.run([0, 0])));
-  console.log("[1, 1] -> [0] ->", Math.round(net.run([1, 1])));
   data.t.forEach(input => {
     let result = Math.round(net.run(input));
     console.log('Should output [1] ->[' + result[0] + ']');
