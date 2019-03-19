@@ -24,7 +24,10 @@ function load(type, setPath, i = 0, threshold, callback) {
     storage = this.f;
   }
   let asset = true;
-  let assetPath = "./sets/" + setPath + "/" + type + "/" + i + ".png";
+  let assetPath = "./sets/" + setPath + "/" + i + ".png";
+  if (type == "false") {
+    assetPath = "./sets/" + type + "/" + i + ".png";
+  }
   console.log("Loading", assetPath);
   asset = loadImage(
     assetPath,
