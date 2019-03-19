@@ -10,7 +10,7 @@ function getOptimalNetwork(convolute, finalCallback) {
   const optimizerSettings = {
     //targetScore : Infinity,
     //maxIterations : Infinity,
-    timeout: 0.5 * 60 * 1000
+    timeout: 10 * 60 * 1000
   };
   new Optimizer(
     () => {
@@ -53,11 +53,8 @@ function getOptimalNetwork(convolute, finalCallback) {
           //iterations: 100, // the maximum times to iterate the training data --> number greater than 0
           errorThresh: vars.errorThresh, // the acceptable error percentage from training data --> number between 0 and 1
           log: true, // true to use console.log, when a function is supplied it is used --> Either true or a function
-          //logPeriod: 10, // iterations between logging out --> number greater than 0
           learningRate: vars.learnRate, // scales with delta to effect training rate --> number between 0 and 1
           momentum: vars.momentum, // scales with next layer's change value --> number between 0 and 1
-          //callback: null, // a periodic call back that can be triggered while training --> null or function
-          //callbackPeriod: 10, // the number of iterations through the training data between callback calls --> number greater than 0
           timeout: 3 * 60 * 1000
         };
         const net = new brain.NeuralNetwork(config);
@@ -148,7 +145,7 @@ function getOptimalNetwork(convolute, finalCallback) {
     new DataSet("a", 50, data => {
       console.log("Data loaded", data);
       const layerArray = derived.layerArray;
-      const inputSize = 2500;
+      const inputSize = 169;
       const outputSize = 1;
       const config = {
         inputSize: inputSize,
@@ -188,7 +185,9 @@ function getOptimalNetwork(convolute, finalCallback) {
       let average = total / executionTimes.length;
       console.log("Average execution time:", average + "ms");
       console.log(net);
-      finalCallback(net);
+      if (finalCallback) {
+        finalCallback(net);
+      }
     });
   });
 }
