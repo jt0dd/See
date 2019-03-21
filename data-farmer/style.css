@@ -1,0 +1,19 @@
+body {
+  width: 100%;
+}
+
+canvas {
+  border-width: 1px;
+  border-style: solid;
+}
+
+#box {
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  border-width: 2px;
+  border-style: solid;
+  color: #1fdd9e;
+  pointer-events: none;
+
+}
