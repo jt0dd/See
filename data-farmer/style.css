@@ -1,10 +1,26 @@
 body {
   width: 100%;
+  margin: 0px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  font-family: Arial;
 }
 
 canvas {
   border-width: 1px;
   border-style: solid;
+}
+
+#content-wrapper {
+  width: 100vw;
+  height: calc(100vh - 200px);
+  overflow: scroll;
+}
+
+#content {
+  padding: 10px;
+  background-color: #33343a;
+  padding-bottom: 200px;
 }
 
 #box {
@@ -15,5 +31,44 @@ canvas {
   border-style: solid;
   color: #1fdd9e;
   pointer-events: none;
+}
 
+.container {
+  position: fixed;
+  width: 100vw;
+  height: 200px;
+  background-color: #334349;
+  bottom: 0px;
+}
+
+.container > #positives, .container > #negatives {
+  display: inline-flex;
+  width: 100vw;
+  overflow: scroll;
+  padding: 10px;
+}
+
+#negatives > canvas {
+  border-color: #f2340e;
+  border-width: 2px;
+  margin-right: 10px;
+  float: left;
+}
+
+#positives > canvas {
+  border-color: #0fdb56;
+  border-width: 2px;
+  margin-right: 10px;
+  float: left;
+}
+
+#export {
+  width: 100px;
+  height:25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #57ec84;
+  margin: 10px;
+  cursor: pointer;
 }

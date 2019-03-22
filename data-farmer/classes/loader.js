@@ -1,4 +1,33 @@
 let counter = 0;
+let resultStorage = {
+  positives: [],
+  negatives: []
+};
+
+document.getElementById("export").onclick = () => {
+  var zip = new JSZip();
+  var positives = zip.folder("true");
+  var negatives = zip.folder("false");
+  for (let i = 0; i < resultStorage.positives.length; i++) {
+    console.log('storing', resultStorage.positives[i]);
+    positives.file(i + ".png", resultStorage.positives[i], {binary: true});
+  }
+  for (let i = 0; i < resultStorage.negatives.length; i++) {
+    console.log('storing', resultStorage.negatives[i]);
+    negatives.file(i + ".png", resultStorage.negatives[i], {binary: true});
+  }
+  zip
+    .generateAsync({
+      type: "blob"
+    })
+    .then(function(content) {
+      saveAs(content, "training-data.zip");
+    });
+};
+
+//.then(function(content) {
+//saveAs(content, "example.zip");
+//});
 
 function edge(data, width, height, threshold) {
   console.log(
@@ -28,7 +57,6 @@ function edge(data, width, height, threshold) {
       }
       for (let subX = -1; subX < 2; subX++) {
         for (let subY = -1; subY < 2; subY++) {
-
           let searchIndex = (y + subY) * width * 4 + (x + subX) * 4;
           let searchR = data[searchIndex];
           let searchG = data[searchIndex + 1];
@@ -39,22 +67,22 @@ function edge(data, width, height, threshold) {
           let sourceB = data[sourceIndex + 2];
           let sourceAverage = (sourceR + sourceG + sourceB) / 3;
           let difference = Math.abs(searchAverage - sourceAverage);
-          if (done){
+          if (done) {
             map[searchIndex] = true;
           }
           if (difference > threshold) {
             map[sourceIndex] = true;
-            map[searchIndex] = true
+            map[searchIndex] = true;
             //if (!done){
-              //result[searchIndex / 4] = 1;
-              //resultImg[sourceIndex] = 0;
-              //resultImg[sourceIndex + 1] = 0;
-              //resultImg[sourceIndex + 2] = 0;
-              //resultImg[sourceIndex + 3] = 255;
-              resultImg[searchIndex] = 0;
-              resultImg[searchIndex + 1] = 0;
-              resultImg[searchIndex + 2] = 0;
-              resultImg[searchIndex + 3] = 255;
+            //result[searchIndex / 4] = 1;
+            //resultImg[sourceIndex] = 0;
+            //resultImg[sourceIndex + 1] = 0;
+            //resultImg[sourceIndex + 2] = 0;
+            //resultImg[sourceIndex + 3] = 255;
+            resultImg[searchIndex] = 0;
+            resultImg[searchIndex + 1] = 0;
+            resultImg[searchIndex + 2] = 0;
+            resultImg[searchIndex + 3] = 255;
             //}
             done = true;
           }
@@ -65,29 +93,44 @@ function edge(data, width, height, threshold) {
   let bitmaps = {
     //result: {data: result, width: width / 4},
     resultImg: {data: resultImg, width: width, height: height}
-  }
+  };
   let dataRaw = resultImg;
   let clamped = Uint8ClampedArray.from(dataRaw);
   let imageData = new ImageData(clamped, bitmaps.resultImg.width);
-  let canvas = document.createElement('canvas');
-  let ctx = canvas.getContext('2d');
+  let canvas = document.createElement("canvas");
+  let ctx = canvas.getContext("2d");
   canvas.width = bitmaps.resultImg.width;
   canvas.height = bitmaps.resultImg.height;
   ctx.putImageData(imageData, 0, 0);
-  document.body.append(canvas);
-  canvas.onclick = function(e) {
-    console.log('Click just happened', e.offsetX, e.offsetY);
+  document.getElementById("content").append(canvas);
+
+  canvas.oncontextmenu = e => {
+    e.preventDefault();
     let selectionData = ctx.getImageData(e.offsetX - 7, e.offsetY - 7, 25, 25);
-    let newCanvas = document.createElement('canvas');
+    let newCanvas = document.createElement("canvas");
     newCanvas.width = 25;
     newCanvas.height = 25;
-    let newContext = newCanvas.getContext('2d');
+    let newContext = newCanvas.getContext("2d");
     newContext.putImageData(selectionData, 0, 0);
-    document.body.append(newCanvas);
+    console.log("Right click detected", e.offsetX, e.offsetY);
+    resultStorage.negatives.push(selectionData);
+    document.getElementById("negatives").prepend(newCanvas);
+  };
+  canvas.onclick = e => {
+    e.preventDefault();
+    let selectionData = ctx.getImageData(e.offsetX - 7, e.offsetY - 7, 25, 25);
+    let newCanvas = document.createElement("canvas");
+    newCanvas.width = 25;
+    newCanvas.height = 25;
+    let newContext = newCanvas.getContext("2d");
+    newContext.putImageData(selectionData, 0, 0);
+    console.log("Left click detected", e.offsetX, e.offsetY);
+    resultStorage.positives.push(selectionData);
+    document.getElementById("positives").prepend(newCanvas);
   };
   //return {
-    //result: {data: result, width: width / 4},
-    //resultImg: {data: resultImg, width: width, height: height}
+  //result: {data: result, width: width / 4},
+  //resultImg: {data: resultImg, width: width, height: height}
   //};
 }
 
@@ -142,9 +185,9 @@ function loadInit(percent = 100, threshold, size, callback) {
       if (percent <= 8) {
         callback(data);
       } else {
-          percent -= 8;
-          callback(data);
-          loadInit(percent, threshold, size, callback);
+        percent -= 8;
+        callback(data);
+        loadInit(percent, threshold, size, callback);
       }
     }
   ]);
