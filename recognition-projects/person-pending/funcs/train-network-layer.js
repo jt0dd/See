@@ -10,8 +10,8 @@ import debugNet from "../funcs/debug-net.js";
 function trainNetworkLayer(originNetwork, finalCallback) {
   const optimizerSettings = {
     // targetScore : Infinity,
-    maxIterations: 30,
-    timeout: 2 * 60 * 1000
+    //maxIterations: 30,
+    timeout: 60 * 60 * 1000
   };
   new Optimizer(
     () => {
@@ -57,8 +57,8 @@ function trainNetworkLayer(originNetwork, finalCallback) {
         let stagnantCount = 0;
         let prevProgressTime = performance.now();
         const trainerConfig = {
-          iterations: 5000, // the maximum times to iterate the training data --> number greater than 0
-          errorThresh: 0.0009, // the acceptable error percentage from training data --> number between 0 and 1
+          iterations: 15000, // the maximum times to iterate the training data --> number greater than 0
+          errorThresh: 0.00005, // the acceptable error percentage from training data --> number between 0 and 1
           log: true, // true to use console.log, when a function is supplied it is used --> Either true or a function
           logPeriod: 100,
           callback: e => {
@@ -95,7 +95,7 @@ function trainNetworkLayer(originNetwork, finalCallback) {
           callbackPeriod: 100,
           learningRate: vars.learnRate, // scales with delta to effect training rate --> number between 0 and 1
           momentum: vars.momentum, // scales with next layer's change value --> number between 0 and 1
-          timeout: 3 * 60 * 1000
+          timeout: 15 * 60 * 1000
         };
         let executionTimes = [];
         let successScore = 0;

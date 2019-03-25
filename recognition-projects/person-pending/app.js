@@ -5,7 +5,7 @@ import CompositeNetwork from "./classes/composite-network.js";
 import trainNetworkLayer from "./funcs/train-network-layer.js";
 import debugNet from "./funcs/debug-net.js";
 
-function test(net3, i = 0) {
+function test(net, i = 0) {
   loadImage(
     "./test-frames/" + i + ".png",
     img => {
@@ -19,7 +19,7 @@ function test(net3, i = 0) {
           for (let y = 0; y + step < img.height; y += step) {
             let input = ctx.getImageData(x, y, 25, 25).data;
             let startRun = performance.now();
-            let result = net3.run(input);
+            let result = net.run(input);
             let endRun = performance.now();
             let durationRun = endRun - startRun;
             runDurations.push(durationRun);
@@ -52,12 +52,12 @@ function test(net3, i = 0) {
         });
         let average = total / runDurations.length;
         console.log(
-          "[Performance Logging] Average net3 run [25px x 25px] took: " +
+          "[Performance Logging] Average net run [25px x 25px] took: " +
             average +
             "ms."
         );
         i++;
-        test(net3, i);
+        test(net, i);
       }
     },
     {
@@ -67,11 +67,17 @@ function test(net3, i = 0) {
 }
 
 trainNetworkLayer(null, net1 => {
-  console.log("net1", net1);
-      new DataSet(data => {
-        debugNet(net1, data, {
-          logging: true
+  trainNetworkLayer(net1, net2 => {
+    trainNetworkLayer(net2, net3 => {
+      trainNetworkLayer(net3, net4 => {
+        console.log("net4", net4);
+        new DataSet(data => {
+          debugNet(net4, data, {
+            logging: true
+          });
         });
+        test(net4);
       });
-      test(net1);
+    });
+  });
 });

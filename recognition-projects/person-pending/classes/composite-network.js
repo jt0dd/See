@@ -6,13 +6,13 @@ class CompositeNetwork {
     this.trainee = false;
   }
   run(input) {
-    let total = 0;
+    let result = 0;
     this.networkArray.forEach(network => {
-      //if (result === 0) {
-        total += Math.round(network.run(input)[0]);
-      //}
+      if (result === 0) {
+        result = Math.round(network.run(input)[0]);
+      }
     });
-    return Math.round(total / this.networkArray.length);
+    return result;
   }
   testRun(input) {
     if (!this.trainee) {
