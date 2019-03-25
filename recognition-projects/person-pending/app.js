@@ -6,9 +6,9 @@ import trainNetworkLayer from "./funcs/train-network-layer.js";
 import debugNet from "./funcs/debug-net.js";
 
 trainNetworkLayer(null, net1 => {
-  console.log('net1', net1);
+  console.log("net1", net1);
   trainNetworkLayer(net1, net2 => {
-    console.log('net2', net2);
+    console.log("net2", net2);
     new DataSet(data => {
       debugNet(net2, data, {
         logging: true
@@ -31,8 +31,8 @@ trainNetworkLayer(null, net1 => {
                 let durationRun = endRun - startRun;
                 runDurations.push(durationRun);
                 if (Math.round(result) === 1) {
-                  console.log('result', result)
-                  console.log('Recognized enemy at [' + x + ', ' + y + ']')
+                  console.log("result", result);
+                  console.log("Recognized enemy at [" + x + ", " + y + "]");
                   targets.push([x, y]);
                 }
               }
@@ -46,15 +46,23 @@ trainNetworkLayer(null, net1 => {
               ctx.strokeStyle = "#40dd35";
               ctx.rect(target[0], target[1], 25, 25);
               ctx.stroke();
-            })
+            });
             document.body.append(img);
-            console.log('[Performance Logging] Total frame processing took ' + durationPass + 'ms.');
+            console.log(
+              "[Performance Logging] Total frame processing took " +
+                durationPass +
+                "ms."
+            );
             let total = 0;
-            runDurations.forEach((duration) => {
+            runDurations.forEach(duration => {
               total += duration;
             });
             let average = total / runDurations.length;
-            console.log('[Performance Logging] Average net2 run [25px x 25px] took: ' + average + 'ms.');
+            console.log(
+              "[Performance Logging] Average net2 run [25px x 25px] took: " +
+                average +
+                "ms."
+            );
           } else {
             throw "Bad image url.";
           }

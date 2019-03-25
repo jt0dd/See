@@ -104,11 +104,11 @@ function trainNetworkLayer(originNetwork, finalCallback) {
         let newNet = new Network(config);
         let net;
         if (!originNetwork) {
-          console.log('Training the first layer of a new CompositeNetwork');
+          console.log("Training the first layer of a new CompositeNetwork");
           net = new CompositeNetwork();
           net.setTrainee(newNet);
         } else {
-          console.log('Training a new layer of existing CompositeNetwork');
+          console.log("Training a new layer of existing CompositeNetwork");
           net = new CompositeNetwork(originNetwork.networkArray);
           net.setTrainee(newNet);
         }

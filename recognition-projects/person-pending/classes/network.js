@@ -24,18 +24,7 @@ class Network {
     dataSet.forEach(item => {
       trainingData.push({input: this.process(item[0]), output: item[1]});
     });
-    console.log("trainingData", trainingData);
-    console.log('config', config);
-    console.log('this.net', this.net);
-    if (this.net.hasTrained) {
-      throw 'This network is being trained a second time';
-    }
     this.net.train(trainingData, config);
-    this.net.hasTrained = true;
-    console.log('should have trained');
-    console.log('this.net', this.net);
-
-    console.log('this.net', this.net);
   }
 }
 

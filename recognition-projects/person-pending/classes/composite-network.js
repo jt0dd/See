@@ -7,9 +7,10 @@ class CompositeNetwork {
   }
   run(input) {
     let result = 0;
-    this.networkArray.forEach((network) => {
+    this.networkArray.forEach(network => {
       if (result === 0) {
         result = Math.round(network.run(input)[0]);
+        console.log("tested network result", result);
       }
     });
     return result;
@@ -18,7 +19,7 @@ class CompositeNetwork {
     let result = 0;
     let testNetArray = this.networkArray.slice();
     testNetArray.push(this.trainee);
-    testNetArray.forEach((network) => {
+    testNetArray.forEach(network => {
       if (result === 0) {
         result = Math.round(network.run(input)[0]);
       }
@@ -42,20 +43,19 @@ class CompositeNetwork {
     });
     let trainee = this.trainee;
     let relevantData = [];
+    let skips = 0;
     data.forEach(item => {
       let input = item[0];
       let expected = item[1][0];
+
       if (this.networkArray.length > 0) {
         let result = this.run(input);
-        if (result === expected) {
+        if (result === 0) {
           console.log(
-            "Network already already outputs [",
-            result,
-            "] as expected [",
-            expected,
-            "], no need to train layer against this data."
+            "Training trainee against any negative results, regardless of previous layer success."
           );
-        } else {
+          relevantData.push(item);
+        } else if (result !== expected) {
           console.log(
             "Network failed to output expected [",
             expected,
@@ -64,6 +64,15 @@ class CompositeNetwork {
             "], training trainee layer against this data."
           );
           relevantData.push(item);
+        } else {
+          console.log(
+            "Network already outputs [",
+            expected,
+            "], as expected [",
+            result,
+            "], not training trainee against this data."
+          );
+          skips++;
         }
       } else {
         console.log(
@@ -72,10 +81,15 @@ class CompositeNetwork {
         relevantData.push(item);
       }
     });
-    console.log('relevantData', relevantData);
-    console.log('config', config);
+    if (skips > 0) {
+      console.log(
+        "Previous layers allow this layer to train for recognition of ",
+        skips,
+        "fewer positive profiles, creating the opportunity for specialization."
+      );
+    }
+    console.log("relevantData", relevantData);
     this.trainee.train(relevantData, config);
-    //console.log('debug');
   }
 }
 

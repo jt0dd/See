@@ -52,7 +52,13 @@ function debugNet(net, data, settings) {
   });
   let average = total / executionTimes.length;
   if (settings.logging) {
-    console.log('Success rate: ' + ((((data.f.length + data.t.length) - failCount) / (data.f.length + data.t.length)) * 100) + '%');
+    console.log(
+      "Success rate: " +
+        ((data.f.length + data.t.length - failCount) /
+          (data.f.length + data.t.length)) *
+          100 +
+        "%"
+    );
     console.log("Average execution time: " + average + "ms");
   }
   return score;
