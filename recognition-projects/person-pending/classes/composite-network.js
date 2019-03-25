@@ -6,16 +6,18 @@ class CompositeNetwork {
     this.trainee = false;
   }
   run(input) {
-    let result = 0;
+    let total = 0;
     this.networkArray.forEach(network => {
-      if (result === 0) {
-        result = Math.round(network.run(input)[0]);
-        console.log("tested network result", result);
-      }
+      //if (result === 0) {
+        total += Math.round(network.run(input)[0]);
+      //}
     });
-    return result;
+    return Math.round(total / this.networkArray.length);
   }
   testRun(input) {
+    if (!this.trainee) {
+      return this.run(input);
+    }
     let result = 0;
     let testNetArray = this.networkArray.slice();
     testNetArray.push(this.trainee);
@@ -44,13 +46,14 @@ class CompositeNetwork {
     let trainee = this.trainee;
     let relevantData = [];
     let skips = 0;
+    let learns = 0;
     data.forEach(item => {
       let input = item[0];
       let expected = item[1][0];
 
       if (this.networkArray.length > 0) {
         let result = this.run(input);
-        if (result === 0) {
+        if (result === 0 || expected === 0) {
           console.log(
             "Training trainee against any negative results, regardless of previous layer success."
           );
@@ -64,6 +67,7 @@ class CompositeNetwork {
             "], training trainee layer against this data."
           );
           relevantData.push(item);
+          learns++;
         } else {
           console.log(
             "Network already outputs [",
@@ -83,9 +87,11 @@ class CompositeNetwork {
     });
     if (skips > 0) {
       console.log(
-        "Previous layers allow this layer to train for recognition of ",
+        "Previous layers allow this layer to train for recognition of",
         skips,
-        "fewer positive profiles, creating the opportunity for specialization."
+        "fewer positive profiles, creating the opportunity for specialization toward the remaining",
+        learns,
+        "positive profiles that the previous layer failed to recognize."
       );
     }
     console.log("relevantData", relevantData);

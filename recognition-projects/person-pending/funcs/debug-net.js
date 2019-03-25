@@ -5,7 +5,12 @@ function debugNet(net, data, settings) {
   let failCount = 0;
   data.t.forEach(input => {
     let start = performance.now();
-    let result = net.testRun(input);
+    let result;
+    if (net.trainee) {
+      result = net.testRun(input);
+    } else {
+      result = net.run(input);
+    }
     let end = performance.now();
     let duration = end - start;
     executionTimes.push(duration);

@@ -58,7 +58,7 @@ function trainNetworkLayer(originNetwork, finalCallback) {
         let prevProgressTime = performance.now();
         const trainerConfig = {
           iterations: 5000, // the maximum times to iterate the training data --> number greater than 0
-          errorThresh: 0.0005, // the acceptable error percentage from training data --> number between 0 and 1
+          errorThresh: 0.0009, // the acceptable error percentage from training data --> number between 0 and 1
           log: true, // true to use console.log, when a function is supplied it is used --> Either true or a function
           logPeriod: 100,
           callback: e => {
