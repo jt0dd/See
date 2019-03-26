@@ -15,8 +15,13 @@ function load(type, i = 0, callback) {
     img => {
       if (img.type != "error") {
         let ctx = img.getContext("2d");
-        let data = ctx.getImageData(0, 0, img.width, img.height).data;
-        let simplifiedData = data;
+        let data = ctx.getImageData(0, 0, img.width, img.height);
+        let simplifiedData;
+        if (this.settings.canvas) {
+          simplifiedData = data;
+        } else {
+          simplifiedData = data.data;
+        }
         storage.push(simplifiedData);
         i++;
         load.apply(this, [type, i, callback]);
@@ -31,7 +36,8 @@ function load(type, i = 0, callback) {
 }
 
 class DataSet {
-  constructor(callback) {
+  constructor(callback, settings = {}) {
+    this.settings = settings;
     this.t = [];
     this.f = [];
     let state = 0;

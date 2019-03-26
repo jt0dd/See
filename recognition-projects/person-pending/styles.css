@@ -1,0 +1,36 @@
+body {
+  background-color: #444444;
+}
+canvas {
+  margin: 5px;
+}
+
+.true {
+  border-color: #6cb081;
+}
+
+.false {
+  border-color: #9a4f4f;
+}
+
+.true, .false {
+  float: left;
+  background-color: #3d495ac2;
+  margin: 5px;
+  padding: 5px;
+  padding-bottom: 0px;
+  border-style: solid;
+}
+
+.true canvas, .false canvas {
+  margin: 0;
+  margin-right: 5px;
+}
+
+.true canvas:nth-child(4), .false canvas:nth-child(5) {
+  margin-right: 0;
+}
+
+.true canvas:hover, .false canvas:hover {
+  transform: scale(2.5)
+}

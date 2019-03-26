@@ -4,6 +4,9 @@ import CompositeNetwork from "./classes/composite-network.js";
 
 import trainNetworkLayer from "./funcs/train-network-layer.js";
 import debugNet from "./funcs/debug-net.js";
+import visualizeDataSet from "./funcs/visualize-data-set.js"
+
+visualizeDataSet();
 
 function test(net, i = 0) {
   loadImage(

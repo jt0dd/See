@@ -11,7 +11,7 @@ function trainNetworkLayer(originNetwork, finalCallback) {
   const optimizerSettings = {
     // targetScore : Infinity,
     //maxIterations: 30,
-    timeout: 60 * 60 * 1000
+    timeout: 180 * 60 * 1000
   };
   new Optimizer(
     () => {
@@ -55,6 +55,7 @@ function trainNetworkLayer(originNetwork, finalCallback) {
         let initialized = false;
         let previousErr = Infinity;
         let stagnantCount = 0;
+        let tooSlowCount = 0;
         let prevProgressTime = performance.now();
         const trainerConfig = {
           iterations: 15000, // the maximum times to iterate the training data --> number greater than 0
@@ -66,7 +67,10 @@ function trainNetworkLayer(originNetwork, finalCallback) {
               let now = performance.now();
               let timeSinceIteration = now - prevProgressTime;
               prevProgressTime = performance.now();
-              if (timeSinceIteration > 12000 && initialized) {
+              if (timeSinceIteration > 15000) {
+                tooSlowCount++;
+              }
+              if (timeSinceIteration > 15000 && tooSlowCount > 5) {
                 console.log(
                   "Time since last iteration",
                   timeSinceIteration,
@@ -75,10 +79,10 @@ function trainNetworkLayer(originNetwork, finalCallback) {
                 net.trainee.net.trainOpts.iterations = 1;
               }
               initialized = true;
-              let targetProgress = previousErr * 0.00005;
+              let targetProgress = previousErr * 0.0000005;
               if (!(e.error < previousErr - targetProgress)) {
                 stagnantCount++;
-                if (stagnantCount >= 10) {
+                if (stagnantCount >= 50) {
                   console.log(
                     "trainingError",
                     e.error,
