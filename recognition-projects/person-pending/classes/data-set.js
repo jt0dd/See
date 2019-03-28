@@ -1,4 +1,4 @@
-import simplify from '../funcs/simplify.js';
+import simplify from "../funcs/simplify.js";
 
 function load(type, i = 0, callback) {
   let storage;

@@ -18,13 +18,16 @@ class Network {
   run(input) {
     return this.net.run(this.process(input));
   }
-  train(dataSet, config) {
+  train(dataSet, config, callback) {
     console.log("Training network...");
     let trainingData = [];
     dataSet.forEach(item => {
       trainingData.push({input: this.process(item[0]), output: item[1]});
     });
-    this.net.train(trainingData, config);
+    this.net.trainAsync(trainingData, config)
+    .then(net => {
+      callback(net);
+    });
   }
 }
 

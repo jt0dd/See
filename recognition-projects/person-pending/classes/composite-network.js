@@ -1,4 +1,7 @@
 import Network from "../classes/network.js";
+import Logger from "../classes/logger.js";
+
+let logger = new Logger('CompositeNetwork');
 
 class CompositeNetwork {
   constructor(networkArray = []) {
@@ -35,7 +38,7 @@ class CompositeNetwork {
     this.networkArray.push(this.trainee);
     delete this.trainee;
   }
-  train(dataSet, config) {
+  train(dataSet, config, callback) {
     let data = [];
     dataSet.t.forEach(input => {
       data.push([input, [1]]);
@@ -54,12 +57,12 @@ class CompositeNetwork {
       if (this.networkArray.length > 0) {
         let result = this.run(input);
         if (result === 0 || expected === 0) {
-          console.log(
+          logger.log(
             "Training trainee against any negative results, regardless of previous layer success."
           );
           relevantData.push(item);
         } else if (result !== expected) {
-          console.log(
+          logger.log(
             "Network failed to output expected [",
             expected,
             "], instead output was [",
@@ -69,7 +72,7 @@ class CompositeNetwork {
           relevantData.push(item);
           learns++;
         } else {
-          console.log(
+          logger.log(
             "Network already outputs [",
             expected,
             "], as expected [",
@@ -79,23 +82,23 @@ class CompositeNetwork {
           skips++;
         }
       } else {
-        console.log(
+        logger.log(
           "Network is the first layer of the CompositeNetwork, training trainee layer against this (all) data."
         );
         relevantData.push(item);
       }
     });
     if (skips > 0) {
-      console.log(
+      logger.log(
         "Previous layers allow this layer to train for recognition of",
         skips,
         "fewer positive profiles, creating the opportunity for specialization toward the remaining",
-        learns,
+        dataSet.t.length - skips,
         "positive profiles that the previous layer failed to recognize."
       );
     }
-    console.log("relevantData", relevantData);
-    this.trainee.train(relevantData, config);
+    logger.log("relevantData", relevantData);
+    this.trainee.train(relevantData, config, callback);
   }
 }
 

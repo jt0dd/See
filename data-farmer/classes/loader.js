@@ -3,16 +3,17 @@ let resultStorage = {
   positives: [],
   negatives: []
 };
+let globalStart = [0, 0];
 
 document.getElementById("export").onclick = () => {
   var zip = new JSZip();
   var positives = zip.folder("true");
   var negatives = zip.folder("false");
-  for (let i = 0; i < resultStorage.positives.length; i++) {
+  for (let i = globalStart[0]; i < resultStorage.positives.length + globalStart[0]; i++) {
     console.log('storing', resultStorage.positives[i]);
     positives.file(i + ".png", resultStorage.positives[i]);
   }
-  for (let i = 0; i < resultStorage.negatives.length; i++) {
+  for (let i = globalStart[1]; i < resultStorage.negatives.length + globalStart[1]; i++) {
     console.log('storing', resultStorage.negatives[i]);
     negatives.file(i + ".png", resultStorage.negatives[i]);
   }
@@ -111,7 +112,8 @@ function loadInit(percent = 100, threshold, size, callback) {
 }
 
 class Loader {
-  constructor(threshold, size, callback) {
+  constructor(threshold, size, callback, start) {
+    globalStart = start;
     loadInit(100, threshold, size, callback);
   }
 }

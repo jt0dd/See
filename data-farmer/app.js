@@ -12,4 +12,4 @@ let loader = new Loader(24, 25, data => {
   data.forEach(bitmaps => {
 
   });
-});
+}, [330, 3409]);

@@ -9,10 +9,12 @@ body {
 canvas {
   border-width: 1px;
   border-style: solid;
+  border-radius: 2px;
 }
 
 #content-wrapper {
   width: 100vw;
+  overflow: scroll;
   height: calc(100vh - 200px);
 }
 
@@ -70,4 +72,5 @@ canvas {
   background-color: #57ec84;
   margin: 10px;
   cursor: pointer;
+  border-radius: 2px;
 }

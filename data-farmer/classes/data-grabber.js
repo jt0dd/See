@@ -22,10 +22,9 @@ function handleMouseMove(event) {
   }
   this.mouseX = event.pageX;
   this.mouseY = event.pageY;
-  this.box.style.left = event.pageX - 12 + 'px';
-  this.box.style.top = event.pageY - 12 + 'px';
+  this.box.style.left = event.pageX - 12 + "px";
+  this.box.style.top = event.pageY - 12 + "px";
   //console.log('x, y', event.pageX, event.pageY);
-
 }
 
 class DataGrabber {
@@ -34,12 +33,10 @@ class DataGrabber {
     console.log("box", this.box);
     this.mouseX;
     this.mouseY;
-    document.onmousemove = ()=>{
+    document.onmousemove = () => {
       handleMouseMove.apply(this);
-    }
-
+    };
   }
-  track(canvas) {}
 }
 
 export default DataGrabber;
