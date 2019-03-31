@@ -9,13 +9,19 @@ document.getElementById("export").onclick = () => {
   var zip = new JSZip();
   var positives = zip.folder("true");
   var negatives = zip.folder("false");
-  for (let i = globalStart[0]; i < resultStorage.positives.length + globalStart[0]; i++) {
-    console.log('storing', resultStorage.positives[i]);
-    positives.file(i + ".png", resultStorage.positives[i]);
+  for (
+    let i = 0;
+    i < resultStorage.positives.length;
+    i++
+  ) {
+    positives.file(i + globalStart[0] + ".png", resultStorage.positives[i]);
   }
-  for (let i = globalStart[1]; i < resultStorage.negatives.length + globalStart[1]; i++) {
-    console.log('storing', resultStorage.negatives[i]);
-    negatives.file(i + ".png", resultStorage.negatives[i]);
+  for (
+    let i = 0;
+    i < resultStorage.negatives.length;
+    i++
+  ) {
+    negatives.file(i + globalStart[1] + ".png", resultStorage.negatives[i]);
   }
   zip
     .generateAsync({
@@ -26,18 +32,48 @@ document.getElementById("export").onclick = () => {
     });
 };
 
-function render(canvas){
+function render(canvas) {
   document.getElementById("content").append(canvas);
   let ctx = canvas.getContext("2d");
+  let inputWidth = 25;
   canvas.oncontextmenu = e => {
     e.preventDefault();
+    if (e.shiftKey) {
+      for (
+        let x = -1 * inputWidth * 5;
+        x < inputWidth * 5 + inputWidth;
+        x += inputWidth
+      ) {
+        for (
+          let y = -1 * inputWidth * 5;
+          y < inputWidth * 5 + inputWidth;
+          y += inputWidth
+        ) {
+          let selectionData = ctx.getImageData(
+            e.offsetX - 9 + x,
+            e.offsetY - 9 + y,
+            25,
+            25
+          );
+          let newCanvas = document.createElement("canvas");
+          newCanvas.width = 25;
+          newCanvas.height = 25;
+          let newContext = newCanvas.getContext("2d");
+          newContext.putImageData(selectionData, 0, 0);
+          let blob = newCanvas.toBlob(function(blob) {
+            resultStorage.negatives.push(blob);
+          });
+          document.getElementById("negatives").prepend(newCanvas);
+        }
+      }
+    }
     let selectionData = ctx.getImageData(e.offsetX - 9, e.offsetY - 9, 25, 25);
     let newCanvas = document.createElement("canvas");
     newCanvas.width = 25;
     newCanvas.height = 25;
     let newContext = newCanvas.getContext("2d");
     newContext.putImageData(selectionData, 0, 0);
-    let blob = newCanvas.toBlob(function (blob) {
+    let blob = newCanvas.toBlob(function(blob) {
       resultStorage.negatives.push(blob);
     });
     console.log("Right click detected", e.offsetX, e.offsetY);
@@ -45,13 +81,42 @@ function render(canvas){
   };
   canvas.onclick = e => {
     e.preventDefault();
+    if (e.shiftKey) {
+      for (
+        let x = -1 * inputWidth * 5;
+        x < inputWidth * 5 + inputWidth;
+        x += inputWidth
+      ) {
+        for (
+          let y = -1 * inputWidth * 5;
+          y < inputWidth * 5 + inputWidth;
+          y += inputWidth
+        ) {
+          let selectionData = ctx.getImageData(
+            e.offsetX - 9 + x,
+            e.offsetY - 9 + y,
+            25,
+            25
+          );
+          let newCanvas = document.createElement("canvas");
+          newCanvas.width = 25;
+          newCanvas.height = 25;
+          let newContext = newCanvas.getContext("2d");
+          newContext.putImageData(selectionData, 0, 0);
+          let blob = newCanvas.toBlob(function(blob) {
+            resultStorage.positives.push(blob);
+          });
+          document.getElementById("positives").prepend(newCanvas);
+        }
+      }
+    }
     let selectionData = ctx.getImageData(e.offsetX - 9, e.offsetY - 9, 25, 25);
     let newCanvas = document.createElement("canvas");
     newCanvas.width = 25;
     newCanvas.height = 25;
     let newContext = newCanvas.getContext("2d");
     newContext.putImageData(selectionData, 0, 0);
-    let blob = newCanvas.toBlob(function (blob) {
+    let blob = newCanvas.toBlob(function(blob) {
       resultStorage.positives.push(blob);
     });
     console.log("Left click detected", e.offsetX, e.offsetY);

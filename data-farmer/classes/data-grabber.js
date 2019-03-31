@@ -29,12 +29,45 @@ function handleMouseMove(event) {
 
 class DataGrabber {
   constructor() {
+    let divs = {};
+    let inputWidth = 25;
+    for (
+      let x = -1 * inputWidth * 5;
+      x < inputWidth * 5 + inputWidth;
+      x += inputWidth
+    ) {
+      divs[x] = {};
+      for (let y = -1 * inputWidth * 5; y < inputWidth * 5 + inputWidth; y += inputWidth) {
+        let element = document.createElement("div");
+        document.body.append(element);
+        divs[x][y] = element;
+        element.className = "box";
+      }
+    }
     this.box = document.getElementById("box");
-    console.log("box", this.box);
     this.mouseX;
     this.mouseY;
-    document.onmousemove = () => {
+    this.shiftdown;
+    document.onmousemove = e => {
+      Object.keys(divs).forEach(rowKey => {
+        let row = divs[rowKey];
+        Object.keys(row).forEach(divKey => {
+          let div = row[divKey];
+          if (e.shiftKey) {
+            div.style["left"] = parseInt(rowKey) + e.pageX - 12 + "px";
+            div.style["top"] = parseInt(divKey) + e.pageY - 12 + "px";
+            div.style["opacity"] = 1;
+          } else {
+            div.style["opacity"] = 0;
+          }
+        });
+      });
       handleMouseMove.apply(this);
+      if (e.shiftKey) {
+        this.shiftdown = true;
+      } else {
+        this.shiftdown = false;
+      }
     };
   }
 }

@@ -1,0 +1,79 @@
+<!doctype html>
+<html>
+
+<head>
+  <script src="./libs/file-saver.js"></script>
+  <script src="./libs/jszip.js"></script>
+  <script src="./libs/load-image-all.js"></script>
+  <script src="./libs/brain.js"></script>
+  <script src="./libs/gpu.js"></script>
+  <script type="module" src="app.js"></script>
+  <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+
+<body>
+  <div id="box"></div>
+  <div id="title">
+    <h1>See.js</h1>
+    <h2>Real-time GPU accelerated image recognition with Brain.js and Tensorflow.js</h1>
+  </div>
+  <div id="visualize-data-container">
+    <h1>Positive Dataset</h1>
+  </div>
+  <div id="stat-container">
+    <h1>Performance</h1>
+    <h2>Status</h2>
+    <div id="status">Training...</div>
+    <h2>Composite Accuracy</h2>
+    <div id="composite-accuracy">
+      <div class="bar">
+        <div id="stat-comp-accuracy-progress" class="progress1"></div>
+        <div id="stat-comp-accuracy-target" class="progress2"></div>
+        <div id="stat-comp-accuracy-text" class="text">30% of target 99% - 0 / 3000 total inputs categorized correctly</div>
+      </div>
+    </div>
+    <h2>Positive Accuracy</h2>
+    <div id="positive-accuracy">
+      <div class="bar">
+        <div id="stat-pos-accuracy-progress"class="progress1"></div>
+        <div id="stat-pos-accuracy-text" class="text">0% - 0 / 300 positive inputs categorized correctly</div>
+      </div>
+    </div>
+    <h2>Negative Accuracy</h2>
+    <div id="negative-accuracy">
+      <div class="bar">
+        <div id="stat-neg-accuracy-progress" class="progress1"></div>
+        <div id="stat-neg-accuracy-text" class="text">0% - 0 / 300 negative inputs categorized correctly</div>
+      </div>
+    </div>
+    <h2>Frame Processing Speed</h2>
+    <div id="speed">
+      <div class="bar">
+        <div id="stat-speed-progress" class="progress1"></div>
+        <div id="stat-speed-target" class="progress2"></div>
+        <div id="stat-speed-text" class="text">0 FPS of target 10 FPS - Average of 1000ms per frame</div>
+      </div>
+    </div>
+    <h2>Training Period</h2>
+    <div id="duration">
+      <div class="bar">
+        <div id="stat-duration-progress" class="progress1"></div>
+        <div id="stat-duration-text" class="text">00:00:00 - 0% of projected 00:00:00 training time elapsed</div>
+      </div>
+    </div>
+    <div id="export-logs" class="button">Export Logs</div>
+    <div id="export-network" class="button">Export Network</div>
+  </div>
+  <div id="test-image-container">
+    <h1>Sample Frames</h1>
+  </div>
+  <div id="gathered-data">
+  <h1>New Data</h1>
+  <h2>Positive Inputs</h2>
+  <div id="positives"></div>
+  <h2>Negative Inputs</h2>
+  <div id="negatives"></div>
+  <div id="export-data" class="button">Export Data</div>
+  </div>
+</body>
+</html>
