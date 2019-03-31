@@ -42,6 +42,7 @@ function handleCanvas(
   let inputWidth = 25;
   let gatheredDataSection = document.getElementById("gathered-data");
   let gatheredDataChildren = Array.from(gatheredDataSection.children);
+  console.log('gatheredDataChildren', gatheredDataChildren)
   let positivesContainer = document.getElementById("positives");
   let negativesContainer = document.getElementById("negatives");
   //dirtyCanvas.onmouseenter = e => {};
@@ -50,90 +51,98 @@ function handleCanvas(
   };
   dirtyCanvas.oncontextmenu = e => {
     e.preventDefault();
-    if (e.shiftKey) {
-      for (
-        let x = -1 * inputWidth * 5;
-        x < inputWidth * 5 + inputWidth;
-        x += inputWidth
-      ) {
+    if (canvas.selected) {
+      console.log('selected');
+      if (e.shiftKey) {
         for (
-          let y = -1 * inputWidth * 5;
-          y < inputWidth * 5 + inputWidth;
-          y += inputWidth
+          let x = -1 * inputWidth * 5;
+          x < inputWidth * 5 + inputWidth;
+          x += inputWidth
         ) {
-          let topLeftCornerX = e.offsetX - 9 + x;
-          let topLeftCornerY = e.offsetY - 9 + y;
-          let bottomRightCornerX = topLeftCornerX + inputWidth;
-          let bottomRightCornerY = topLeftCornerY + inputWidth;
-          if (
-            topLeftCornerX > 0 &&
-            topLeftCornerY > 0 &&
-            bottomRightCornerX < canvas.width &&
-            bottomRightCornerY < canvas.height
+          for (
+            let y = -1 * inputWidth * 5;
+            y < inputWidth * 5 + inputWidth;
+            y += inputWidth
           ) {
-            let selectionData = ctx.getImageData(
-              topLeftCornerX,
-              topLeftCornerY,
-              inputWidth,
-              inputWidth
-            );
-            let newCanvas = document.createElement("canvas");
-            newCanvas.width = inputWidth;
-            newCanvas.height = inputWidth;
-            let newContext = newCanvas.getContext("2d");
-            newContext.putImageData(selectionData, 0, 0);
-            let blob = newCanvas.toBlob(function(blob) {
-              resultStorage.negatives.push(blob);
-            });
-            gatheredDataChildren.forEach( child => {
-              child.style["display"] = "auto";
-            });
-            gatheredDataChildren = [];
-            let newCanvasWrapper = document.createElement("div");
-            let newCanvasWrapperCover = document.createElement("div");
-            let newCanvasWrapperImg = document.createElement("img");
-            newCanvasWrapperImg.src = '../assets/trash.png';
-            newCanvasWrapper.className = "data-wrapper";
-            newCanvasWrapperCover.className = "data-wrapper-cover";
-            newCanvasWrapperCover.append(newCanvasWrapperImg);
-            newCanvasWrapper.append(newCanvasWrapperCover);
-            newCanvasWrapper.append(newCanvas);
-            negativesContainer.prepend(newCanvasWrapper);
+            let topLeftCornerX = e.offsetX - 9 + x;
+            let topLeftCornerY = e.offsetY - 9 + y;
+            let bottomRightCornerX = topLeftCornerX + inputWidth;
+            let bottomRightCornerY = topLeftCornerY + inputWidth;
+            if (
+              topLeftCornerX > 0 &&
+              topLeftCornerY > 0 &&
+              bottomRightCornerX < canvas.width &&
+              bottomRightCornerY < canvas.height
+            ) {
+              let selectionData = ctx.getImageData(
+                topLeftCornerX,
+                topLeftCornerY,
+                inputWidth,
+                inputWidth
+              );
+              let newCanvas = document.createElement("canvas");
+              newCanvas.width = inputWidth;
+              newCanvas.height = inputWidth;
+              let newContext = newCanvas.getContext("2d");
+              newContext.putImageData(selectionData, 0, 0);
+              let blob = newCanvas.toBlob(function(blob) {
+                resultStorage.negatives.push(blob);
+              });
+              let newCanvasWrapper = document.createElement("div");
+              let newCanvasWrapperCover = document.createElement("div");
+              let newCanvasWrapperImg = document.createElement("img");
+              newCanvasWrapperImg.src = "./assets/trash.png";
+              newCanvasWrapper.className = "data-wrapper";
+              newCanvasWrapperCover.className = "data-wrapper-cover";
+              gatheredDataChildren.forEach(child => {
+                child.style.display = "flex";
+                console.log('style updated', child, child.style, child.style.display)
+              });
+              gatheredDataChildren = [];
+              newCanvasWrapperCover.append(newCanvasWrapperImg);
+              newCanvasWrapper.append(newCanvasWrapperCover);
+              newCanvasWrapper.append(newCanvas);
+              negativesContainer.prepend(newCanvasWrapper);
+            }
           }
         }
+      } else {
+        let selectionData = ctx.getImageData(
+          e.offsetX - 12,
+          e.offsetY - 12,
+          inputWidth,
+          inputWidth
+        );
+        let newCanvas = document.createElement("canvas");
+        newCanvas.width = inputWidth;
+        newCanvas.height = inputWidth;
+        let newContext = newCanvas.getContext("2d");
+        newContext.putImageData(selectionData, 0, 0);
+        let blob = newCanvas.toBlob(function(blob) {
+          resultStorage.negatives.push(blob);
+        });
+        let newCanvasWrapper = document.createElement("div");
+        let newCanvasWrapperCover = document.createElement("div");
+        let newCanvasWrapperImg = document.createElement("img");
+        newCanvasWrapperImg.src = "./assets/trash.png";
+        newCanvasWrapper.className = "data-wrapper";
+        newCanvasWrapperCover.className = "data-wrapper-cover";
+        gatheredDataChildren.forEach(child => {
+          child.style.display = "flex";
+          console.log('style updated', child, child.style, child.style.display)
+        });
+        gatheredDataChildren = [];
+        newCanvasWrapperCover.append(newCanvasWrapperImg);
+        newCanvasWrapper.append(newCanvasWrapperCover);
+        newCanvasWrapper.append(newCanvas);
+        negativesContainer.prepend(newCanvasWrapper);
       }
+    } else {
+      console.log('not selected')
     }
-    let selectionData = ctx.getImageData(
-      e.offsetX - 12,
-      e.offsetY - 12,
-      inputWidth,
-      inputWidth
-    );
-    let newCanvas = document.createElement("canvas");
-    newCanvas.width = inputWidth;
-    newCanvas.height = inputWidth;
-    let newContext = newCanvas.getContext("2d");
-    newContext.putImageData(selectionData, 0, 0);
-    let blob = newCanvas.toBlob(function(blob) {
-      resultStorage.negatives.push(blob);
-    });
-    gatheredDataChildren.forEach( child => {
-      child.style["display"] = "auto";
-    });
-    gatheredDataChildren = [];
-    let newCanvasWrapper = document.createElement("div");
-    let newCanvasWrapperCover = document.createElement("div");
-    let newCanvasWrapperImg = document.createElement("img");
-    img.src = '../assets/trash.png';
-    newCanvasWrapper.className = "data-wrapper";
-    newCanvasWrapperCover.className = "data-wrapper-cover";
-    newCanvasWrapperCover.append(newCanvasWrapperImg);
-    newCanvasWrapper.append(newCanvasWrapperCover);
-    newCanvasWrapper.append(newCanvas);
-    negativesContainer.prepend(newCanvasWrapper);
   };
   dirtyCanvas.onmousemove = e => {
-    if (e.shiftKey && dirtyCanvas.selected) {
+    if (e.shiftKey && canvas.selected) {
       dirtyContext.putImageData(dirtyCopy, 0, 0);
       for (
         let x = -1 * inputWidth * 5;
@@ -215,11 +224,20 @@ function handleCanvas(
               let blob = newCanvas.toBlob(function(blob) {
                 resultStorage.positives.push(blob);
               });
-              gatheredDataChildren.forEach( child => {
-                child.style["display"] = "auto";
+              let newCanvasWrapper = document.createElement("div");
+              let newCanvasWrapperCover = document.createElement("div");
+              let newCanvasWrapperImg = document.createElement("img");
+              newCanvasWrapperImg.src = "./assets/trash.png";
+              newCanvasWrapper.className = "data-wrapper";
+              newCanvasWrapperCover.className = "data-wrapper-cover";
+              gatheredDataChildren.forEach(child => {
+                child.style.display = "flex";
               });
               gatheredDataChildren = [];
-              positivesContainer.prepend(newCanvas);
+              newCanvasWrapperCover.append(newCanvasWrapperImg);
+              newCanvasWrapper.append(newCanvasWrapperCover);
+              newCanvasWrapper.append(newCanvas);
+              positivesContainer.prepend(newCanvasWrapper);
             }
           }
         }
@@ -238,32 +256,38 @@ function handleCanvas(
         let blob = newCanvas.toBlob(function(blob) {
           resultStorage.positives.push(blob);
         });
-        gatheredDataChildren.forEach( child => {
-          child.style["display"] = "auto";
-        });
-        gatheredDataChildren = [];
         let newCanvasWrapper = document.createElement("div");
         let newCanvasWrapperCover = document.createElement("div");
         let newCanvasWrapperImg = document.createElement("img");
-        newCanvasWrapperImg.src = '../assets/trash.png';
+        newCanvasWrapperImg.src = "./assets/trash.png";
         newCanvasWrapper.className = "data-wrapper";
         newCanvasWrapperCover.className = "data-wrapper-cover";
+        gatheredDataChildren.forEach(child => {
+          child.style.display = "flex";
+        });
+        gatheredDataChildren = [];
         newCanvasWrapperCover.append(newCanvasWrapperImg);
         newCanvasWrapper.append(newCanvasWrapperCover);
         newCanvasWrapper.append(newCanvas);
         positivesContainer.prepend(newCanvasWrapper);
       }
     } else {
+      wrappers.forEach(item => {
+        item.style.width = "";
+        item.style.height = "";
+        item.className = "";
+      });
       canvases.forEach(item => {
         item.selected = false;
+        item.className = "";
+        item.style.opacity = "";
       });
+      wrapper.style.width = dirtyCanvas.width + "px";
+      wrapper.style.height = dirtyCanvas.height + "px";
       canvas.selected = true;
-      wrappers.forEach(item => {
-        item.style["width"] = "";
-        item.style["height"] = "";
-      });
-      wrapper.style["width"] = canvas.width + "px";
-      wrapper.style["height"] = canvas.height + "px";
+      wrapper.className = "selected";
+      dirtyCanvas.className = "selected";
+      console.log('modified dirtyCanvas', dirtyCanvas)
     }
   };
 }

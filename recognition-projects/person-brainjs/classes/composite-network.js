@@ -2,17 +2,22 @@ import Network from "../classes/network.js";
 import Logger from "../classes/logger.js";
 
 let logger = new Logger('CompositeNetwork');
+let processTime;
 
 class CompositeNetwork {
   constructor(networkArray = []) {
     this.networkArray = networkArray;
     this.trainee = false;
+    this.processTime = 0;
   }
   run(input) {
     let result = 0;
+    this.processTime = 0;
     this.networkArray.forEach(network => {
       if (result === 0) {
         result = Math.round(network.run(input)[0]);
+        //console.log("network.processTime", network.processTime);
+        this.processTime += network.processTime;
       }
     });
     return result;
