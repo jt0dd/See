@@ -9,9 +9,14 @@ let duration;
 let processed;
 
 class Network {
-  constructor(config) {
+  constructor(config, net) {
     this.processTime = 0;
-    this.net = new brain.NeuralNetwork(config);
+    if (net) {
+      this.net = new brain.NeuralNetwork();
+      this.net = this.net.fromJSON(net)
+    } else {
+      this.net = new brain.NeuralNetwork(config);
+    }
   }
   process(imageData) {
     start = performance.now();
@@ -29,12 +34,10 @@ class Network {
     return this.net.run(this.process(input));
   }
   train(dataSet, config, callback) {
-    console.log("Training network...");
     let trainingData = [];
     dataSet.forEach(item => {
       trainingData.push({input: this.process(item[0]), output: item[1]});
     });
-    console.log("config", config);
     this.net.trainAsync(trainingData, config).then(net => {
       callback(net);
     });

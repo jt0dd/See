@@ -3,6 +3,8 @@ var allContent = "";
 var previousText = "";
 var iterator = 0;
 var counterText = "";
+let status = document.getElementById("status");
+let previousRenderTime = performance.now();
 
 document.onreadystatechange = () => {
   if (document.readyState === "complete") {
@@ -56,6 +58,11 @@ class Logger {
       this.content += counterText;
     } else {
       previousText = text;
+      let now = performance.now();
+      if (now - previousRenderTime > 1000) {
+        status.innerText = text.substr(0, 100);
+        previousRenderTime = now;
+      }
       iterator = 0;
       let line = text + "\r\n";
       allContent += line;

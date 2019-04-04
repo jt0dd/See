@@ -1,7 +1,8 @@
 import Network from "../classes/network.js";
 import Logger from "../classes/logger.js";
+import FrameProcessor from "../classes/frame-processor.js";
 
-let logger = new Logger('CompositeNetwork');
+let logger = new Logger("CompositeNetwork");
 let processTime;
 
 class CompositeNetwork {
@@ -9,6 +10,30 @@ class CompositeNetwork {
     this.networkArray = networkArray;
     this.trainee = false;
     this.processTime = 0;
+  }
+  export() {
+    let results = [];
+    this.networkArray.forEach(network => {
+      results.push(network.net.toJSON());
+    });
+    console.log('Exported network', results);
+    return results;
+  }
+  import(networkArray) {
+    networkArray.forEach(net => {
+      this.networkArray.push(new Network(null, net));
+    });
+    console.log('Imported network', this.networkArray);
+  }
+  applyCanvas(canvas){
+    this.frameProcessor = new FrameProcessor(canvas);
+  }
+  processFrame() {
+    if (this.frameProcessor) {
+      this.frameProcessor.process();
+    } else {
+      throw 'Attempted to process frame before applying a canvas to CompositeNetwork';
+    }
   }
   run(input) {
     let result = 0;
@@ -38,6 +63,17 @@ class CompositeNetwork {
   }
   setTrainee(net) {
     this.trainee = net;
+  }
+  generateWorkers() {
+    this.workers = [];
+    for (let i = 0; i < this.threads; i++) {
+      this.workers.push(new Worker("./workers/main.js"));
+      this.workers[i].postMessage({
+        operation: "load-network-array",
+        networkArray: this.export()
+      });
+    }
+    console.log("Generated workers on ", this.threads, "threads.");
   }
   confirmTrainee() {
     this.networkArray.push(this.trainee);
@@ -102,7 +138,6 @@ class CompositeNetwork {
         "positive profiles that the previous layer failed to recognize."
       );
     }
-    logger.log("relevantData", relevantData);
     this.trainee.train(relevantData, config, callback);
   }
 }

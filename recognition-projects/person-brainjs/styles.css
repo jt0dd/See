@@ -319,9 +319,9 @@ h1 {
 
 #stat-container .progress1 {
   z-index: 1;
-  transition: width 0.3s;
+  transition: width 2s;
   position: absolute;
-  width: 30%;
+  width: 1%;
   height: calc(100% - 10px);
   border-radius: 2px;
   margin: 5px;
@@ -339,9 +339,9 @@ h1 {
 }
 
 #stat-container .progress2 {
-  transition: width 0.3s;
+  transition: width 2s;
   position: absolute;
-  width: 98%;
+  width: 1%;
   height: calc(100% - 10px);
   border-radius: 2px;
   margin: 5px;
@@ -411,6 +411,16 @@ h1 {
   flex-wrap: wrap;
 }
 
+#positives > .data-wrapper {
+  color: #32a681;
+  background-color: #32a681;
+}
+
+#negatives > .data-wrapper {
+  color: #cc5c40;
+  background-color: #cc5c40;
+}
+
 #positives > .data-wrapper, #negatives > .data-wrapper {
   width: 25px;
   display: flex;
@@ -418,8 +428,7 @@ h1 {
   border-style: solid;
   border-width: 1px;
   border-radius: 2px;
-  color: #32a681;
-  background-color: #32a681;
+
   float: left;
   margin-right: 5px;
   margin-bottom:5px;

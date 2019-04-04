@@ -95,7 +95,7 @@ function visualizeDataSet(callback, max = Infinity) {
       //}
       });
       setTimeout(()=>{
-        callback();
+        if (callback) callback();
       }, 3000)
     },
     {

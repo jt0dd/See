@@ -2,13 +2,20 @@ import Logger from "../classes/logger.js";
 
 import getChildWithClassname from "../funcs/get-child-with-classname.js";
 
-let logger = new Logger('testNet');
+let logger = new Logger("scoreNet");
+let bestResults = {
+  positiveAccuracy: 0,
+  negativeAccuracy: 0,
+  compositeAccuracy: 0
+};
 
-function testNet(net, data, settings, callback = false) {
+function scoreNet(net, data, settings, callback = false) {
   let executionTimes = [];
   let tScore = 0;
   let fScore = 0;
   let failCount = 0;
+  let tFailCount = 0;
+  let fFailCount = 0;
   data.t.forEach((input, index) => {
     let start = performance.now();
     let result;
@@ -39,6 +46,7 @@ function testNet(net, data, settings, callback = false) {
         child.style = "background-color: #f45942";
       }
       failCount++;
+      tFailCount++;
       tScore -= weight;
     }
   });
@@ -66,6 +74,7 @@ function testNet(net, data, settings, callback = false) {
       if (child) {
         child.style = "background-color: #f45942";
       }
+      fFailCount++;
       failCount++;
       fScore -= weight;
     }
@@ -84,10 +93,52 @@ function testNet(net, data, settings, callback = false) {
     logger.log("Success rate: " + successRate + "%");
     logger.log("Average execution time: " + average + "ms");
   }
+  if (settings.ui) {
+    setTimeout(() => {
+      let compAccuracyPercent = Math.round(
+        ((data.t.length + data.f.length - failCount) /
+          (data.t.length + data.f.length)) *
+          100
+      );
+      let posAccuracyPercent = Math.round(
+        ((data.t.length - tFailCount) / data.t.length) * 100
+      );
+      let negAccuracyPercent = Math.round(
+        ((data.f.length - fFailCount) / data.f.length) * 100
+      );
+      document.getElementById("stat-comp-accuracy-progress").style.width =
+        "calc(" + compAccuracyPercent + "% - 10px)";
+      document.getElementById("stat-pos-accuracy-progress").style.width =
+        "calc(" + posAccuracyPercent + "% - 10px)";
+      document.getElementById("stat-neg-accuracy-progress").style.width =
+        "calc(" + negAccuracyPercent + "% - 10px)";
+      document.getElementById("stat-comp-accuracy-text").innerText =
+        compAccuracyPercent +
+        "% - " +
+        (data.f.length + data.t.length - failCount) +
+        " / " +
+        (data.f.length + data.t.length) +
+        " total inputs categorized correctly";
+      document.getElementById("stat-pos-accuracy-text").innerText =
+        posAccuracyPercent +
+        "% - " +
+        (data.t.length - tFailCount) +
+        " / " +
+        data.t.length +
+        " positive inputs categorized correctly";
+      document.getElementById("stat-neg-accuracy-text").innerText =
+        negAccuracyPercent +
+        "% - " +
+        (data.f.length - fFailCount) +
+        " / " +
+        data.f.length +
+        " negative inputs categorized correctly";
+    }, 1000);
+  }
   if (callback) {
-    callback(net, successRate, failCount);
+    callback(net, successRate, failCount, fFailCount, tFailCount);
   }
   return score;
 }
 
-export default testNet;
+export default scoreNet;

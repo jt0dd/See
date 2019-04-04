@@ -6,7 +6,7 @@ import Logger from "../classes/logger.js";
 
 import getRandomNumber from "../funcs/get-random-number.js";
 import getRandomDecimal from "../funcs/get-random-decimal.js";
-import testNet from "../funcs/test-net.js";
+import scoreNet from "../funcs/score-net.js";
 
 let optimizerMinutes = 1;
 let trainerMinutes = 1;
@@ -134,7 +134,7 @@ function trainNetworkLayer(originNetwork, finalCallback) {
         }
         net.train(data, trainerConfig, () => {
           successScore =
-            testNet(net, data, {
+            scoreNet(net, data, {
               logging: true
             }) * 10;
           let score = 0;

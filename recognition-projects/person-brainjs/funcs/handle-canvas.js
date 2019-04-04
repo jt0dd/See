@@ -42,7 +42,6 @@ function handleCanvas(
   let inputWidth = 25;
   let gatheredDataSection = document.getElementById("gathered-data");
   let gatheredDataChildren = Array.from(gatheredDataSection.children);
-  console.log('gatheredDataChildren', gatheredDataChildren)
   let positivesContainer = document.getElementById("positives");
   let negativesContainer = document.getElementById("negatives");
   //dirtyCanvas.onmouseenter = e => {};
@@ -52,7 +51,6 @@ function handleCanvas(
   dirtyCanvas.oncontextmenu = e => {
     e.preventDefault();
     if (canvas.selected) {
-      console.log('selected');
       if (e.shiftKey) {
         for (
           let x = -1 * inputWidth * 5;
@@ -96,7 +94,6 @@ function handleCanvas(
               newCanvasWrapperCover.className = "data-wrapper-cover";
               gatheredDataChildren.forEach(child => {
                 child.style.display = "flex";
-                console.log('style updated', child, child.style, child.style.display)
               });
               gatheredDataChildren = [];
               newCanvasWrapperCover.append(newCanvasWrapperImg);
@@ -129,7 +126,6 @@ function handleCanvas(
         newCanvasWrapperCover.className = "data-wrapper-cover";
         gatheredDataChildren.forEach(child => {
           child.style.display = "flex";
-          console.log('style updated', child, child.style, child.style.display)
         });
         gatheredDataChildren = [];
         newCanvasWrapperCover.append(newCanvasWrapperImg);
@@ -137,8 +133,6 @@ function handleCanvas(
         newCanvasWrapper.append(newCanvas);
         negativesContainer.prepend(newCanvasWrapper);
       }
-    } else {
-      console.log('not selected')
     }
   };
   dirtyCanvas.onmousemove = e => {
@@ -243,8 +237,8 @@ function handleCanvas(
         }
       } else {
         let selectionData = ctx.getImageData(
-          e.offsetX - 9,
-          e.offsetY - 9,
+          e.offsetX - 12,
+          e.offsetY - 12,
           25,
           25
         );
@@ -275,6 +269,7 @@ function handleCanvas(
       wrappers.forEach(item => {
         item.style.width = "";
         item.style.height = "";
+        item.style.marginRight = "";
         item.className = "";
       });
       canvases.forEach(item => {
@@ -284,10 +279,10 @@ function handleCanvas(
       });
       wrapper.style.width = dirtyCanvas.width + "px";
       wrapper.style.height = dirtyCanvas.height + "px";
+      wrapper.style.marginRight = "1000px";
       canvas.selected = true;
       wrapper.className = "selected";
       dirtyCanvas.className = "selected";
-      console.log('modified dirtyCanvas', dirtyCanvas)
     }
   };
 }

@@ -1,4 +1,5 @@
 import simplify from "../funcs/simplify.js";
+let cache = {};
 
 function load(type, i = 0, callback) {
   let storage;
@@ -9,30 +10,45 @@ function load(type, i = 0, callback) {
   }
   let asset = true;
   let assetPath = "./sets/" + type + "/" + i + ".png";
-  //console.log("Loading", assetPath);
-  asset = loadImage(
-    assetPath,
-    img => {
-      if (img.type != "error") {
-        let ctx = img.getContext("2d");
-        let data = ctx.getImageData(0, 0, img.width, img.height);
-        let simplifiedData;
-        if (this.settings.canvas) {
-          simplifiedData = data;
-        } else {
-          simplifiedData = data.data;
-        }
-        storage.push(simplifiedData);
-        i++;
-        load.apply(this, [type, i, callback]);
-      } else {
-        if (callback) callback();
-      }
-    },
-    {
-      canvas: true
+  if (cache[assetPath]) {
+    let img = cache[assetPath];
+    let ctx = img.getContext("2d");
+    let data = ctx.getImageData(0, 0, img.width, img.height);
+    let simplifiedData;
+    if (this.settings.canvas) {
+      simplifiedData = data;
+    } else {
+      simplifiedData = data.data;
     }
-  );
+    storage.push(simplifiedData);
+    i++;
+    load.apply(this, [type, i, callback]);
+  } else {
+    asset = loadImage(
+      assetPath,
+      img => {
+        if (img.type != "error") {
+          cache[assetPath] = img;
+          let ctx = img.getContext("2d");
+          let data = ctx.getImageData(0, 0, img.width, img.height);
+          let simplifiedData;
+          if (this.settings.canvas) {
+            simplifiedData = data;
+          } else {
+            simplifiedData = data.data;
+          }
+          storage.push(simplifiedData);
+          i++;
+          load.apply(this, [type, i, callback]);
+        } else {
+          if (callback) callback();
+        }
+      },
+      {
+        canvas: true
+      }
+    );
+  }
 }
 
 class DataSet {
