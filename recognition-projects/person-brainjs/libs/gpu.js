@@ -1306,7 +1306,7 @@ module.exports = function () {
 					if (parent) {
 						fNode.parent = parent;
 					}
-					fNode.getFunctionString();
+					fNode.getFunctionString(); 
 					for (var i = 0; i < fNode.calledFunctions.length; ++i) {
 						this.traceFunctionCalls(fNode.calledFunctions[i], retList, fNode);
 					}
@@ -2018,7 +2018,7 @@ module.exports = function () {
 			this._webGl = settings.webGl;
 		}
 		if (settings.hasOwnProperty('output')) {
-			this.setOutput(settings.output);
+			this.setOutput(settings.output); 
 		}
 
 		if (!this._canvas) this._canvas = utils.initCanvas();
@@ -4127,10 +4127,10 @@ module.exports = function (_KernelBase) {
 						gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
 						gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 						gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-						var mipLevel = 0;
-						var internalFormat = gl.RGBA;
-						var srcFormat = gl.RGBA;
-						var srcType = gl.UNSIGNED_BYTE;
+						var mipLevel = 0; 
+						var internalFormat = gl.RGBA; 
+						var srcFormat = gl.RGBA; 
+						var srcType = gl.UNSIGNED_BYTE; 
 						gl.texImage2D(gl.TEXTURE_2D, mipLevel, internalFormat, srcFormat, srcType, inputImage);
 						this.setUniform3iv('user_' + name + 'Dim', _dim2);
 						this.setUniform2iv('user_' + name + 'Size', _size2);
@@ -4149,7 +4149,7 @@ module.exports = function (_KernelBase) {
 
 						this.setUniform3iv('user_' + name + 'Dim', _dim3);
 						this.setUniform2iv('user_' + name + 'Size', _size3);
-						this.setUniform1i('user_' + name + 'BitRatio', 1);
+						this.setUniform1i('user_' + name + 'BitRatio', 1); 
 						this.setUniform1i('user_' + name, this.argumentsLength);
 						break;
 					}
@@ -4254,10 +4254,10 @@ module.exports = function (_KernelBase) {
 						gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
 						gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 						gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-						var mipLevel = 0;
-						var internalFormat = gl.RGBA;
-						var srcFormat = gl.RGBA;
-						var srcType = gl.UNSIGNED_BYTE;
+						var mipLevel = 0; 
+						var internalFormat = gl.RGBA; 
+						var srcFormat = gl.RGBA; 
+						var srcType = gl.UNSIGNED_BYTE; 
 						gl.texImage2D(gl.TEXTURE_2D, mipLevel, internalFormat, srcFormat, srcType, inputImage);
 						this.setUniform3iv('constants_' + name + 'Dim', _dim5);
 						this.setUniform2iv('constants_' + name + 'Size', _size5);
@@ -4276,7 +4276,7 @@ module.exports = function (_KernelBase) {
 
 						this.setUniform3iv('constants_' + name + 'Dim', _dim6);
 						this.setUniform2iv('constants_' + name + 'Size', _size6);
-						this.setUniform1i('constants_' + name + 'BitRatio', 1);
+						this.setUniform1i('constants_' + name + 'BitRatio', 1); 
 						this.setUniform1i('constants_' + name, this.constantsLength);
 						break;
 					}
@@ -4291,7 +4291,7 @@ module.exports = function (_KernelBase) {
 	}, {
 		key: '_formatArrayTransfer',
 		value: function _formatArrayTransfer(value, length) {
-			var bitRatio = 1;
+			var bitRatio = 1; 
 			var valuesFlat = value;
 			if (utils.isArray(value[0]) || this.floatTextures) {
 				valuesFlat = new Float32Array(length);
@@ -5258,10 +5258,10 @@ module.exports = function (_WebGLKernel) {
 						gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
 						gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 						gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-						var mipLevel = 0;
-						var internalFormat = gl.RGBA;
-						var srcFormat = gl.RGBA;
-						var srcType = gl.UNSIGNED_BYTE;
+						var mipLevel = 0; 
+						var internalFormat = gl.RGBA; 
+						var srcFormat = gl.RGBA; 
+						var srcType = gl.UNSIGNED_BYTE; 
 						gl.texImage2D(gl.TEXTURE_2D, mipLevel, internalFormat, srcFormat, srcType, inputImage);
 						this.setUniform3iv('user_' + name + 'Dim', _dim2);
 						this.setUniform2iv('user_' + name + 'Size', _size2);
@@ -5279,14 +5279,14 @@ module.exports = function (_WebGLKernel) {
 						gl.texParameteri(gl.TEXTURE_2D_ARRAY, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 						gl.texParameteri(gl.TEXTURE_2D_ARRAY, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
 						gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-						var _mipLevel = 0;
-						var _internalFormat = gl.RGBA;
+						var _mipLevel = 0; 
+						var _internalFormat = gl.RGBA; 
 						var width = inputImages[0].width;
 						var height = inputImages[0].height;
 						var textureDepth = inputImages.length;
 						var border = 0;
-						var _srcFormat = gl.RGBA;
-						var _srcType = gl.UNSIGNED_BYTE;
+						var _srcFormat = gl.RGBA; 
+						var _srcType = gl.UNSIGNED_BYTE; 
 						gl.texImage3D(gl.TEXTURE_2D_ARRAY, _mipLevel, _internalFormat, width, height, textureDepth, border, _srcFormat, _srcType, null);
 						for (var i = 0; i < inputImages.length; i++) {
 							var xOffset = 0;
@@ -5311,7 +5311,7 @@ module.exports = function (_WebGLKernel) {
 
 						this.setUniform3iv('user_' + name + 'Dim', _dim4);
 						this.setUniform2iv('user_' + name + 'Size', _size4);
-						this.setUniform1i('user_' + name + 'BitRatio', 1);
+						this.setUniform1i('user_' + name + 'BitRatio', 1); 
 						this.setUniform1i('user_' + name, this.argumentsLength);
 						break;
 					}
@@ -5452,10 +5452,10 @@ module.exports = function (_WebGLKernel) {
 						gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
 						gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 						gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-						var mipLevel = 0;
-						var internalFormat = gl.RGBA;
-						var srcFormat = gl.RGBA;
-						var srcType = gl.UNSIGNED_BYTE;
+						var mipLevel = 0; 
+						var internalFormat = gl.RGBA; 
+						var srcFormat = gl.RGBA; 
+						var srcType = gl.UNSIGNED_BYTE; 
 						gl.texImage2D(gl.TEXTURE_2D, mipLevel, internalFormat, srcFormat, srcType, inputImage);
 						this.setUniform3iv('constants_' + name + 'Dim', _dim6);
 						this.setUniform2iv('constants_' + name + 'Size', _size6);
@@ -5473,14 +5473,14 @@ module.exports = function (_WebGLKernel) {
 						gl.texParameteri(gl.TEXTURE_2D_ARRAY, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 						gl.texParameteri(gl.TEXTURE_2D_ARRAY, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
 						gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-						var _mipLevel2 = 0;
-						var _internalFormat2 = gl.RGBA;
+						var _mipLevel2 = 0; 
+						var _internalFormat2 = gl.RGBA; 
 						var width = inputImages[0].width;
 						var height = inputImages[0].height;
 						var textureDepth = inputImages.length;
 						var border = 0;
-						var _srcFormat2 = gl.RGBA;
-						var _srcType2 = gl.UNSIGNED_BYTE;
+						var _srcFormat2 = gl.RGBA; 
+						var _srcType2 = gl.UNSIGNED_BYTE; 
 						gl.texImage3D(gl.TEXTURE_2D_ARRAY, _mipLevel2, _internalFormat2, width, height, textureDepth, border, _srcFormat2, _srcType2, null);
 						for (var i = 0; i < inputImages.length; i++) {
 							var xOffset = 0;
@@ -5505,7 +5505,7 @@ module.exports = function (_WebGLKernel) {
 
 						this.setUniform3iv('constants_' + name + 'Dim', _dim8);
 						this.setUniform2iv('constants_' + name + 'Size', _size8);
-						this.setUniform1i('constants_' + name + 'BitRatio', 1);
+						this.setUniform1i('constants_' + name + 'BitRatio', 1); 
 						this.setUniform1i('constants_' + name, this.constantsLength);
 						break;
 					}
@@ -6150,7 +6150,7 @@ var GPU = function (_GPUCore) {
 
 				var destroyWebGl = !_this2._webGl && kernels.length && kernels[0]._webGl;
 				for (var i = 0; i < _this2.kernels.length; i++) {
-					_this2.kernels[i].destroy(true);
+					_this2.kernels[i].destroy(true); 
 				}
 
 				if (destroyWebGl) {
@@ -6543,7 +6543,7 @@ var Utils = function (_UtilsCore) {
 		value: function clone(obj) {
 			if (obj === null || (typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) !== 'object' || obj.hasOwnProperty('isActiveClone')) return obj;
 
-			var temp = obj.constructor();
+			var temp = obj.constructor(); 
 
 			for (var key in obj) {
 				if (Object.prototype.hasOwnProperty.call(obj, key)) {
@@ -7463,7 +7463,7 @@ pp$1.isLet = function() {
   skipWhiteSpace.lastIndex = this.pos;
   var skip = skipWhiteSpace.exec(this.input);
   var next = this.pos + skip[0].length, nextCh = this.input.charCodeAt(next);
-  if (nextCh === 91 || nextCh == 123) { return true }
+  if (nextCh === 91 || nextCh == 123) { return true } 
   if (isIdentifierStart(nextCh, true)) {
     var pos = next + 1;
     while (isIdentifierChar(this.input.charCodeAt(pos), true)) { ++pos; }
@@ -7692,7 +7692,7 @@ pp$1.parseSwitchStatement = function(node) {
   }
   this.exitLexicalScope();
   if (cur) { this.finishNode(cur, "SwitchCase"); }
-  this.next();
+  this.next(); 
   this.labels.pop();
   return this.finishNode(node, "SwitchStatement")
 };
@@ -8025,7 +8025,7 @@ pp$1.parseExport = function(node, exports) {
     this.semicolon();
     return this.finishNode(node, "ExportAllDeclaration")
   }
-  if (this.eat(types._default)) {
+  if (this.eat(types._default)) { 
     this.checkExport(exports, "default", this.lastTokStart);
     var isAsync;
     if (this.type === types._function || (isAsync = this.isAsyncFunction())) {
@@ -8050,7 +8050,7 @@ pp$1.parseExport = function(node, exports) {
       { this.checkExport(exports, node.declaration.id.name, node.declaration.id.start); }
     node.specifiers = [];
     node.source = null;
-  } else {
+  } else { 
     node.declaration = null;
     node.specifiers = this.parseExportSpecifiers(exports);
     if (this.eatContextual("from")) {
@@ -8548,7 +8548,7 @@ pp$3.parseMaybeAssign = function(noIn, refDestructuringErrors, afterLeftParse) {
     node.operator = this.value;
     node.left = this.type === types.eq ? this.toAssignable(left, false, refDestructuringErrors) : left;
     if (!ownDestructuringErrors) { DestructuringErrors.call(refDestructuringErrors); }
-    refDestructuringErrors.shorthandAssign = -1;
+    refDestructuringErrors.shorthandAssign = -1; 
     this.checkLVal(left);
     this.next();
     node.right = this.parseMaybeAssign(noIn);
@@ -10371,7 +10371,7 @@ function isSyntaxCharacter(ch) {
     ch === 0x2E  ||
     ch === 0x3F  ||
     ch >= 0x5B  && ch <= 0x5E  ||
-    ch >= 0x7B  && ch <= 0x7D
+    ch >= 0x7B  && ch <= 0x7D 
   )
 }
 
@@ -10394,7 +10394,7 @@ pp$9.regexp_eatExtendedPatternCharacter = function(state) {
     ch !== 0x3F  &&
     ch !== 0x5B  &&
     ch !== 0x5E  &&
-    ch !== 0x7C
+    ch !== 0x7C 
   ) {
     state.advance();
     return true
@@ -10455,7 +10455,7 @@ pp$9.regexp_eatRegExpIdentifierStart = function(state) {
   return false
 };
 function isRegExpIdentifierStart(ch) {
-  return isIdentifierStart(ch, true) || ch === 0x24  || ch === 0x5F
+  return isIdentifierStart(ch, true) || ch === 0x24  || ch === 0x5F 
 }
 
 pp$9.regexp_eatRegExpIdentifierPart = function(state) {
@@ -10475,7 +10475,7 @@ pp$9.regexp_eatRegExpIdentifierPart = function(state) {
   return false
 };
 function isRegExpIdentifierPart(ch) {
-  return isIdentifierChar(ch, true) || ch === 0x24  || ch === 0x5F  || ch === 0x200C  || ch === 0x200D
+  return isIdentifierChar(ch, true) || ch === 0x24  || ch === 0x5F  || ch === 0x200C  || ch === 0x200D 
 }
 
 pp$9.regexp_eatAtomEscape = function(state) {
@@ -10556,27 +10556,27 @@ pp$9.regexp_eatZero = function(state) {
 pp$9.regexp_eatControlEscape = function(state) {
   var ch = state.current();
   if (ch === 0x74 ) {
-    state.lastIntValue = 0x09;
+    state.lastIntValue = 0x09; 
     state.advance();
     return true
   }
   if (ch === 0x6E ) {
-    state.lastIntValue = 0x0A;
+    state.lastIntValue = 0x0A; 
     state.advance();
     return true
   }
   if (ch === 0x76 ) {
-    state.lastIntValue = 0x0B;
+    state.lastIntValue = 0x0B; 
     state.advance();
     return true
   }
   if (ch === 0x66 ) {
-    state.lastIntValue = 0x0C;
+    state.lastIntValue = 0x0C; 
     state.advance();
     return true
   }
   if (ch === 0x72 ) {
-    state.lastIntValue = 0x0D;
+    state.lastIntValue = 0x0D; 
     state.advance();
     return true
   }
@@ -10646,7 +10646,7 @@ pp$9.regexp_eatIdentityEscape = function(state) {
       return true
     }
     if (state.eat(0x2F )) {
-      state.lastIntValue = 0x2F;
+      state.lastIntValue = 0x2F; 
       return true
     }
     return false
@@ -10710,7 +10710,7 @@ function isCharacterClassEscape(ch) {
     ch === 0x73  ||
     ch === 0x53  ||
     ch === 0x77  ||
-    ch === 0x57
+    ch === 0x57 
   )
 }
 
@@ -10755,7 +10755,7 @@ pp$9.regexp_eatUnicodePropertyName = function(state) {
   return state.lastStringValue !== ""
 };
 function isUnicodePropertyNameCharacter(ch) {
-  return isControlLetter(ch) || ch === 0x5F
+  return isControlLetter(ch) || ch === 0x5F 
 }
 
 pp$9.regexp_eatUnicodePropertyValue = function(state) {
@@ -10835,12 +10835,12 @@ pp$9.regexp_eatClassEscape = function(state) {
   var start = state.pos;
 
   if (state.eat(0x62 )) {
-    state.lastIntValue = 0x08;
+    state.lastIntValue = 0x08; 
     return true
   }
 
   if (state.switchU && state.eat(0x2D )) {
-    state.lastIntValue = 0x2D;
+    state.lastIntValue = 0x2D; 
     return true
   }
 
@@ -10892,7 +10892,7 @@ pp$9.regexp_eatDecimalDigits = function(state) {
   return state.pos !== start
 };
 function isDecimalDigit(ch) {
-  return ch >= 0x30  && ch <= 0x39
+  return ch >= 0x30  && ch <= 0x39 
 }
 
 pp$9.regexp_eatHexDigits = function(state) {
@@ -10919,7 +10919,7 @@ function hexToInt(ch) {
   if (ch >= 0x61  && ch <= 0x66 ) {
     return 10 + (ch - 0x61 )
   }
-  return ch - 0x30
+  return ch - 0x30 
 }
 
 pp$9.regexp_eatLegacyOctalEscapeSequence = function(state) {
@@ -10943,7 +10943,7 @@ pp$9.regexp_eatLegacyOctalEscapeSequence = function(state) {
 pp$9.regexp_eatOctalDigit = function(state) {
   var ch = state.current();
   if (isOctalDigit(ch)) {
-    state.lastIntValue = ch - 0x30;
+    state.lastIntValue = ch - 0x30; 
     state.advance();
     return true
   }
@@ -10951,7 +10951,7 @@ pp$9.regexp_eatOctalDigit = function(state) {
   return false
 };
 function isOctalDigit(ch) {
-  return ch >= 0x30  && ch <= 0x37
+  return ch >= 0x30  && ch <= 0x37 
 }
 
 pp$9.regexp_eatFixedHexDigits = function(state, length) {
@@ -11089,7 +11089,7 @@ pp$8.skipSpace = function() {
   loop: while (this.pos < this.input.length) {
     var ch = this$1.input.charCodeAt(this$1.pos);
     switch (ch) {
-    case 32: case 160:
+    case 32: case 160: 
       ++this$1.pos;
       break
     case 13:
@@ -11103,9 +11103,9 @@ pp$8.skipSpace = function() {
         this$1.lineStart = this$1.pos;
       }
       break
-    case 47:
+    case 47: 
       switch (this$1.input.charCodeAt(this$1.pos + 1)) {
-      case 42:
+      case 42: 
         this$1.skipBlockComment();
         break
       case 47:
@@ -11141,7 +11141,7 @@ pp$8.readToken_dot = function() {
   var next = this.input.charCodeAt(this.pos + 1);
   if (next >= 48 && next <= 57) { return this.readNumber(true) }
   var next2 = this.input.charCodeAt(this.pos + 2);
-  if (this.options.ecmaVersion >= 6 && next === 46 && next2 === 46) {
+  if (this.options.ecmaVersion >= 6 && next === 46 && next2 === 46) { 
     this.pos += 3;
     return this.finishToken(types.ellipsis)
   } else {
@@ -11150,14 +11150,14 @@ pp$8.readToken_dot = function() {
   }
 };
 
-pp$8.readToken_slash = function() {
+pp$8.readToken_slash = function() { 
   var next = this.input.charCodeAt(this.pos + 1);
   if (this.exprAllowed) { ++this.pos; return this.readRegexp() }
   if (next === 61) { return this.finishOp(types.assign, 2) }
   return this.finishOp(types.slash, 1)
 };
 
-pp$8.readToken_mult_modulo_exp = function(code) {
+pp$8.readToken_mult_modulo_exp = function(code) { 
   var next = this.input.charCodeAt(this.pos + 1);
   var size = 1;
   var tokentype = code === 42 ? types.star : types.modulo;
@@ -11172,20 +11172,20 @@ pp$8.readToken_mult_modulo_exp = function(code) {
   return this.finishOp(tokentype, size)
 };
 
-pp$8.readToken_pipe_amp = function(code) {
+pp$8.readToken_pipe_amp = function(code) { 
   var next = this.input.charCodeAt(this.pos + 1);
   if (next === code) { return this.finishOp(code === 124 ? types.logicalOR : types.logicalAND, 2) }
   if (next === 61) { return this.finishOp(types.assign, 2) }
   return this.finishOp(code === 124 ? types.bitwiseOR : types.bitwiseAND, 1)
 };
 
-pp$8.readToken_caret = function() {
+pp$8.readToken_caret = function() { 
   var next = this.input.charCodeAt(this.pos + 1);
   if (next === 61) { return this.finishOp(types.assign, 2) }
   return this.finishOp(types.bitwiseXOR, 1)
 };
 
-pp$8.readToken_plus_min = function(code) {
+pp$8.readToken_plus_min = function(code) { 
   var next = this.input.charCodeAt(this.pos + 1);
   if (next === code) {
     if (next == 45 && !this.inModule && this.input.charCodeAt(this.pos + 2) == 62 &&
@@ -11200,7 +11200,7 @@ pp$8.readToken_plus_min = function(code) {
   return this.finishOp(types.plusMin, 1)
 };
 
-pp$8.readToken_lt_gt = function(code) {
+pp$8.readToken_lt_gt = function(code) { 
   var next = this.input.charCodeAt(this.pos + 1);
   var size = 1;
   if (next === code) {
@@ -11218,10 +11218,10 @@ pp$8.readToken_lt_gt = function(code) {
   return this.finishOp(types.relational, size)
 };
 
-pp$8.readToken_eq_excl = function(code) {
+pp$8.readToken_eq_excl = function(code) { 
   var next = this.input.charCodeAt(this.pos + 1);
   if (next === 61) { return this.finishOp(types.equality, this.input.charCodeAt(this.pos + 2) === 61 ? 3 : 2) }
-  if (code === 61 && next === 62 && this.options.ecmaVersion >= 6) {
+  if (code === 61 && next === 62 && this.options.ecmaVersion >= 6) { 
     this.pos += 2;
     return this.finishToken(types.arrow)
   }
@@ -11230,7 +11230,7 @@ pp$8.readToken_eq_excl = function(code) {
 
 pp$8.getTokenFromCode = function(code) {
   switch (code) {
-  case 46:
+  case 46: 
     return this.readToken_dot()
 
   case 40: ++this.pos; return this.finishToken(types.parenL)
@@ -11244,48 +11244,48 @@ pp$8.getTokenFromCode = function(code) {
   case 58: ++this.pos; return this.finishToken(types.colon)
   case 63: ++this.pos; return this.finishToken(types.question)
 
-  case 96:
+  case 96: 
     if (this.options.ecmaVersion < 6) { break }
     ++this.pos;
     return this.finishToken(types.backQuote)
 
-  case 48:
+  case 48: 
     var next = this.input.charCodeAt(this.pos + 1);
-    if (next === 120 || next === 88) { return this.readRadixNumber(16) }
+    if (next === 120 || next === 88) { return this.readRadixNumber(16) } 
     if (this.options.ecmaVersion >= 6) {
-      if (next === 111 || next === 79) { return this.readRadixNumber(8) }
-      if (next === 98 || next === 66) { return this.readRadixNumber(2) }
+      if (next === 111 || next === 79) { return this.readRadixNumber(8) } 
+      if (next === 98 || next === 66) { return this.readRadixNumber(2) } 
     }
 
-  case 49: case 50: case 51: case 52: case 53: case 54: case 55: case 56: case 57:
+  case 49: case 50: case 51: case 52: case 53: case 54: case 55: case 56: case 57: 
     return this.readNumber(false)
 
-  case 34: case 39:
+  case 34: case 39: 
     return this.readString(code)
 
 
-  case 47:
+  case 47: 
     return this.readToken_slash()
 
-  case 37: case 42:
+  case 37: case 42: 
     return this.readToken_mult_modulo_exp(code)
 
-  case 124: case 38:
+  case 124: case 38: 
     return this.readToken_pipe_amp(code)
 
-  case 94:
+  case 94: 
     return this.readToken_caret()
 
-  case 43: case 45:
+  case 43: case 45: 
     return this.readToken_plus_min(code)
 
-  case 60: case 62:
+  case 60: case 62: 
     return this.readToken_lt_gt(code)
 
-  case 61: case 33:
+  case 61: case 33: 
     return this.readToken_eq_excl(code)
 
-  case 126:
+  case 126: 
     return this.finishOp(types.prefix, 1)
   }
 
@@ -11341,9 +11341,9 @@ pp$8.readInt = function(radix, len) {
   var start = this.pos, total = 0;
   for (var i = 0, e = len == null ? Infinity : len; i < e; ++i) {
     var code = this$1.input.charCodeAt(this$1.pos), val = (void 0);
-    if (code >= 97) { val = code - 97 + 10; }
-    else if (code >= 65) { val = code - 65 + 10; }
-    else if (code >= 48 && code <= 57) { val = code - 48; }
+    if (code >= 97) { val = code - 97 + 10; } 
+    else if (code >= 65) { val = code - 65 + 10; } 
+    else if (code >= 48 && code <= 57) { val = code - 48; } 
     else { val = Infinity; }
     if (val >= radix) { break }
     ++this$1.pos;
@@ -11355,7 +11355,7 @@ pp$8.readInt = function(radix, len) {
 };
 
 pp$8.readRadixNumber = function(radix) {
-  this.pos += 2;
+  this.pos += 2; 
   var val = this.readInt(radix);
   if (val == null) { this.raise(this.start + 2, "Expected number in radix " + radix); }
   if (isIdentifierStart(this.fullCharCodeAtPos())) { this.raise(this.pos, "Identifier directly after number"); }
@@ -11370,14 +11370,14 @@ pp$8.readNumber = function(startsWithDot) {
   if (octal && this.strict) { this.raise(start, "Invalid number"); }
   if (octal && /[89]/.test(this.input.slice(start, this.pos))) { octal = false; }
   var next = this.input.charCodeAt(this.pos);
-  if (next === 46 && !octal) {
+  if (next === 46 && !octal) { 
     ++this.pos;
     this.readInt(10);
     next = this.input.charCodeAt(this.pos);
   }
-  if ((next === 69 || next === 101) && !octal) {
+  if ((next === 69 || next === 101) && !octal) { 
     next = this.input.charCodeAt(++this.pos);
-    if (next === 43 || next === 45) { ++this.pos; }
+    if (next === 43 || next === 45) { ++this.pos; } 
     if (this.readInt(10) === null) { this.raise(start, "Invalid number"); }
   }
   if (isIdentifierStart(this.fullCharCodeAtPos())) { this.raise(this.pos, "Identifier directly after number"); }
@@ -11391,7 +11391,7 @@ pp$8.readNumber = function(startsWithDot) {
 pp$8.readCodePoint = function() {
   var ch = this.input.charCodeAt(this.pos), code;
 
-  if (ch === 123) {
+  if (ch === 123) { 
     if (this.options.ecmaVersion < 6) { this.unexpected(); }
     var codePos = ++this.pos;
     code = this.readHexChar(this.input.indexOf("}", this.pos) - this.pos);
@@ -11417,7 +11417,7 @@ pp$8.readString = function(quote) {
     if (this$1.pos >= this$1.input.length) { this$1.raise(this$1.start, "Unterminated string constant"); }
     var ch = this$1.input.charCodeAt(this$1.pos);
     if (ch === quote) { break }
-    if (ch === 92) {
+    if (ch === 92) { 
       out += this$1.input.slice(chunkStart, this$1.pos);
       out += this$1.readEscapedChar(false);
       chunkStart = this$1.pos;
@@ -11463,7 +11463,7 @@ pp$8.readTmplToken = function() {
   for (;;) {
     if (this$1.pos >= this$1.input.length) { this$1.raise(this$1.start, "Unterminated template"); }
     var ch = this$1.input.charCodeAt(this$1.pos);
-    if (ch === 96 || ch === 36 && this$1.input.charCodeAt(this$1.pos + 1) === 123) {
+    if (ch === 96 || ch === 36 && this$1.input.charCodeAt(this$1.pos + 1) === 123) { 
       if (this$1.pos === this$1.start && (this$1.type === types.template || this$1.type === types.invalidTemplate)) {
         if (ch === 36) {
           this$1.pos += 2;
@@ -11476,7 +11476,7 @@ pp$8.readTmplToken = function() {
       out += this$1.input.slice(chunkStart, this$1.pos);
       return this$1.finishToken(types.template, out)
     }
-    if (ch === 92) {
+    if (ch === 92) { 
       out += this$1.input.slice(chunkStart, this$1.pos);
       out += this$1.readEscapedChar(true);
       chunkStart = this$1.pos;
@@ -11531,16 +11531,16 @@ pp$8.readEscapedChar = function(inTemplate) {
   var ch = this.input.charCodeAt(++this.pos);
   ++this.pos;
   switch (ch) {
-  case 110: return "\n"
-  case 114: return "\r"
-  case 120: return String.fromCharCode(this.readHexChar(2))
-  case 117: return codePointToString(this.readCodePoint())
-  case 116: return "\t"
-  case 98: return "\b"
-  case 118: return "\u000b"
-  case 102: return "\f"
-  case 13: if (this.input.charCodeAt(this.pos) === 10) { ++this.pos; }
-  case 10:
+  case 110: return "\n" 
+  case 114: return "\r" 
+  case 120: return String.fromCharCode(this.readHexChar(2)) 
+  case 117: return codePointToString(this.readCodePoint()) 
+  case 116: return "\t" 
+  case 98: return "\b" 
+  case 118: return "\u000b" 
+  case 102: return "\f" 
+  case 13: if (this.input.charCodeAt(this.pos) === 10) { ++this.pos; } 
+  case 10: 
     if (this.options.locations) { this.lineStart = this.pos; ++this.curLine; }
     return ""
   default:
@@ -11581,11 +11581,11 @@ pp$8.readWord1 = function() {
     var ch = this$1.fullCharCodeAtPos();
     if (isIdentifierChar(ch, astral)) {
       this$1.pos += ch <= 0xffff ? 1 : 2;
-    } else if (ch === 92) {
+    } else if (ch === 92) { 
       this$1.containsEsc = true;
       word += this$1.input.slice(chunkStart, this$1.pos);
       var escStart = this$1.pos;
-      if (this$1.input.charCodeAt(++this$1.pos) != 117)
+      if (this$1.input.charCodeAt(++this$1.pos) != 117) 
         { this$1.invalidStringToken(this$1.pos, "Expecting Unicode escape sequence \\uXXXX"); }
       ++this$1.pos;
       var esc = this$1.readCodePoint();
@@ -11633,7 +11633,7 @@ function tokenizer(input, options) {
 }
 
 function addLooseExports(parse, Parser$$1, plugins$$1) {
-  exports.parse_dammit = parse;
+  exports.parse_dammit = parse; 
   exports.LooseParser = Parser$$1;
   exports.pluginsLoose = plugins$$1;
 }

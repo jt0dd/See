@@ -1,5 +1,4 @@
 import Logger from "../classes/logger.js";
-
 import handleCanvas from "../funcs/handle-canvas.js";
 
 let logger = new Logger("testResults");
@@ -21,10 +20,14 @@ function testResults(net, i = 0) {
         wrapper.append(img);
         let allTargets = [];
         for (let percent = 100; percent >= 10; percent -= 5) {
+          let scaleStart = performance.now();
           let scaleImg = loadImage.scale(
             img, // img or canvas element
             {maxWidth: img.width * (percent / 100)}
           );
+          let scaleEnd = performance.now();
+          let scaleDuration = scaleEnd - scaleStart;
+          logger.log('scaleDuration', scaleDuration);
           let cleanImg = document.createElement("canvas");
           canvases.push(cleanImg, scaleImg);
           cleanImg.width = scaleImg.width;

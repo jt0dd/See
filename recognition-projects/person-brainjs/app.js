@@ -1,10 +1,10 @@
 import DataSet from "./classes/data-set.js";
 import CompositeNetwork from "./classes/composite-network.js";
 import Network from "./classes/network.js";
-
 import scoreNet from "./funcs/score-net.js";
 import visualizeDataSet from "./funcs/visualize-data-set.js";
 import testResults from "./funcs/test-results.js";
+import testResultsAccelerated from "./funcs/test-results-accelerated.js";
 import buildComposite from "./funcs/build-composite.js";
 import loadJSON from "./funcs/load-json.js";
 
@@ -31,25 +31,25 @@ loadJSON("./network-export/network-0.json", response => {
       });
       let compositeNet = new CompositeNetwork(netArrayWrapped);
       new DataSet(data => {
-        scoreNet(compositeNet, data, {ui: true});
-        testResults(compositeNet);
-        visualizeDataSet();
+        //scoreNet(compositeNet, data, {ui: true});
+        //testResults(compositeNet);
+        testResultsAccelerated(compositeNet);
+        //visualizeDataSet();
       });
     });
   } else {
     console.log("Training new network");
-    visualizeDataSet(() => {
-      buildComposite(
-        compositeNet => {
-          console.log("compositeNet", compositeNet);
-          new DataSet(data => {
-            scoreNet(compositeNet, data, {ui: true});
-            testResults(compositeNet);
-          });
-        },
-        null,
-        90
-      );
-    });
+    buildComposite(
+      compositeNet => {
+        console.log("compositeNet", compositeNet);
+        new DataSet(data => {
+          scoreNet(compositeNet, data, {ui: true});
+          testResults(compositeNet);
+          visualizeDataSet();
+        });
+      },
+      null,
+      90
+    );
   }
 });

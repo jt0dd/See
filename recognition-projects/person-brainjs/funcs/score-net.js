@@ -1,5 +1,4 @@
 import Logger from "../classes/logger.js";
-
 import getChildWithClassname from "../funcs/get-child-with-classname.js";
 
 let logger = new Logger("scoreNet");

@@ -3,7 +3,6 @@ import DataSet from "../classes/data-set.js";
 import Network from "../classes/network.js";
 import CompositeNetwork from "../classes/composite-network.js";
 import Logger from "../classes/logger.js";
-
 import getRandomNumber from "../funcs/get-random-number.js";
 import getRandomDecimal from "../funcs/get-random-decimal.js";
 import scoreNet from "../funcs/score-net.js";

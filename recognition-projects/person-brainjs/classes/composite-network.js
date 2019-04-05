@@ -1,7 +1,6 @@
 import Network from "../classes/network.js";
 import Logger from "../classes/logger.js";
 import FrameProcessor from "../classes/frame-processor.js";
-
 let logger = new Logger("CompositeNetwork");
 let processTime;
 
@@ -25,14 +24,18 @@ class CompositeNetwork {
     });
     console.log('Imported network', this.networkArray);
   }
-  applyCanvas(canvas){
-    this.frameProcessor = new FrameProcessor(canvas);
-  }
-  processFrame() {
+  addOutputScale(dims){
     if (this.frameProcessor) {
-      this.frameProcessor.process();
+      this.frameProcessor.addScale(dims);
     } else {
-      throw 'Attempted to process frame before applying a canvas to CompositeNetwork';
+      this.frameProcessor = new FrameProcessor(dims);
+    }
+  }
+  processFrame(image, dims) {
+    if (this.frameProcessor) {
+      return this.frameProcessor.process(image, dims);
+    } else {
+      throw 'Attempted to process frame before adding output scales!';
     }
   }
   run(input) {

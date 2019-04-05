@@ -1,6 +1,5 @@
 import DataSet from "../classes/data-set.js";
 import Logger from "../classes/logger.js";
-
 import scoreNet from "../funcs/score-net.js";
 import trainNetworkLayer from "../funcs/train-network-layer.js";
 

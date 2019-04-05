@@ -1,6 +1,5 @@
 import DataSet from "../classes/data-set.js";
 import Logger from "../classes/logger.js";
-
 import edge from "../funcs/edge.js";
 import simplify from "../funcs/simplify.js";
 import convolute from "../funcs/convolute.js";
