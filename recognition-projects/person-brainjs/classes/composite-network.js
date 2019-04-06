@@ -9,33 +9,82 @@ class CompositeNetwork {
     this.networkArray = networkArray;
     this.trainee = false;
     this.processTime = 0;
+    this.frameProcessor = new FrameProcessor();
   }
   export() {
     let results = [];
     this.networkArray.forEach(network => {
       results.push(network.net.toJSON());
     });
-    console.log('Exported network', results);
+    logger.log("Exported network", results);
     return results;
   }
   import(networkArray) {
     networkArray.forEach(net => {
       this.networkArray.push(new Network(null, net));
     });
-    console.log('Imported network', this.networkArray);
+    logger.log("Imported network", this.networkArray);
   }
-  addOutputScale(dims){
-    if (this.frameProcessor) {
+  setOutputScales(image, steps) {
+    let imageWidth = image.width;
+    let imageHeight = image.height;
+    let prevDims = {w: imageWidth, h: imageHeight};
+    let lastScale = 1;
+    let step = Math.round(100 / steps);
+    this.steps = steps;
+    this.step = step;
+    for (let percent = 100; percent >= step; percent -= step) {
+      let percentScale = percent / 100;
+      let adjustedScale = percentScale / lastScale;
+      lastScale = percentScale;
+      let newWidth = Math.round(imageWidth * adjustedScale);
+      let newHeight = Math.round(imageHeight * adjustedScale);
+      let dims = {w: newWidth, h: newHeight};
+      prevDims = dims;
       this.frameProcessor.addScale(dims);
-    } else {
-      this.frameProcessor = new FrameProcessor(dims);
     }
   }
-  processFrame(image, dims) {
+  processFrame(image) {
     if (this.frameProcessor) {
-      return this.frameProcessor.process(image, dims);
+      logger.log("Processing frame...");
+      let imageWidth = image.width;
+      let imageHeight = image.height;
+      let lastScale = 1;
+      let start = performance.now();
+      let prevDims = {w: imageWidth, h: imageHeight};
+      let frameCount = 0;
+      for (let percent = 100; percent >= this.step; percent -= this.step) {
+        frameCount++;
+        let percentScale = percent / 100;
+        let adjustedScale = percentScale / lastScale;
+        lastScale = percentScale;
+        let newWidth = Math.round(imageWidth * adjustedScale);
+        let newHeight = Math.round(imageHeight * adjustedScale);
+        let dims = {w: newWidth, h: newHeight};
+        let scale = prevDims.w / dims.w;
+        prevDims = dims;
+        let result = this.frameProcessor.process(image, dims, scale);
+        logger.log("result", result);
+
+        /*
+            targets.forEach(target => {
+              ctx.beginPath();
+              ctx.lineWidth = "2";
+              ctx.strokeStyle = "#40dd35";
+              ctx.rect(target[0], target[1], 25, 25);
+              ctx.stroke();
+            });
+            */
+      }
+      let end = performance.now();
+      let duration = end - start;
+      logger.log(
+        "Processing frame complete with avg duration of",
+        duration / frameCount + "ms and a total duration of",
+        duration + "ms"
+      );
     } else {
-      throw 'Attempted to process frame before adding output scales!';
+      throw "Attempted to process frame before setting output scales!";
     }
   }
   run(input) {

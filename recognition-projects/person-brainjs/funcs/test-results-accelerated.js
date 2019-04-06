@@ -4,42 +4,20 @@ import handleCanvas from "../funcs/handle-canvas.js";
 let logger = new Logger("testResultsAccelerated");
 
 function testResultsAccelerated(net, i = 0) {
-  loadImage(
-    "./test-frames/" + i + ".png",
-    image => {
-      if (image.type != "error") {
-        i++;
-        testResultsAccelerated(net, i);
-      }
-      if (image.type != "error") {
-        let allTargets = [];
-        let lastScale = 1;
-        //for (let percent = 100; percent >= 10; percent -= 5) {
-        let percent = 100;
-          let percentScale = percent / 100;
-          let adjustedScale = percentScale / lastScale;
-          lastScale = percentScale;
-          let newWidth = Math.round(image.width * adjustedScale);
-          let newHeight = Math.round(image.height * adjustedScale);
-          logger.log("Processing frame...");
-          let dims = {w: newWidth, h: newHeight};
-          net.addOutputScale(dims);
-          let result = net.processFrame(image, dims);
-          document.getElementById("accelerated-image-container").append(result);
+  loadImage("./test-frames/" + i + ".png", image => {
+    if (image.type != "error") {
+      i++;
+      testResultsAccelerated(net, i);
+    }
+    if (image.type != "error") {
+      let steps = 4;
+      net.setOutputScales(image, steps);
+      let result = net.processFrame(image);
+    }
 
+    //logger.log('Result', result);
 
-          /*
-          targets.forEach(target => {
-            ctx.beginPath();
-            ctx.lineWidth = "2";
-            ctx.strokeStyle = "#40dd35";
-            ctx.rect(target[0], target[1], 25, 25);
-            ctx.stroke();
-          });
-          */
-        //}
-
-        /*
+    /*
         logger.log("[Performance Logging] Frame processing time: " + total);
         logger.log("We found targets:", allTargets);
 
@@ -69,9 +47,7 @@ function testResultsAccelerated(net, i = 0) {
           rawContext.stroke();
         });
         */
-      }
-    }
-  );
+  });
 }
 
 export default testResultsAccelerated;
