@@ -7,7 +7,7 @@ class FrameProcessor {
   addScale(
     dims,
     settings = {
-      pipe: false
+      pipe: true
     }
   ) {
     console.log("Adding scale to FrameProcessor", dims);
@@ -92,7 +92,7 @@ class FrameProcessor {
           }
         },
         {
-          pipeline: true
+          pipeline: settings.pipe
         }
       )
       .setOutput([dims.w, dims.h]);
@@ -121,7 +121,7 @@ class FrameProcessor {
           return value;
         },
         {
-          pipeline: true
+          pipeline: settings.pipe
         }
       )
       .setOutput([dims.w - 2, dims.h - 2]);
@@ -132,7 +132,7 @@ class FrameProcessor {
           let max = 5; // should be generated dynamically based on filter size
           let poolSide = 1;
           let negativePoolSide = poolSide * -1;
-          let value = 0;
+          let value = 5;
           for (let xOffset = negativePoolSide; xOffset <= poolSide; xOffset++) {
             for (
               let yOffset = negativePoolSide;
@@ -141,7 +141,7 @@ class FrameProcessor {
             ) {
               let yIndex = this.thread.y + 1 + yOffset;
               let xIndex = this.thread.x + 1 + xOffset;
-              if (texture[yIndex][xIndex] > value) {
+              if (texture[yIndex][xIndex] < value) {
                 value = texture[yIndex][xIndex];
               }
             }
@@ -149,7 +149,7 @@ class FrameProcessor {
           return value / max;
         },
         {
-          pipeline: true
+          pipeline: settings.pipe
         }
       )
       .setOutput([dims.w - 4, dims.h - 4]);
@@ -157,8 +157,14 @@ class FrameProcessor {
     let define = this.gpu
       .createKernel(function(texture) {
         let value = texture[this.thread.y][this.thread.x];
-        if (value > 0.5) {
+        if (value > 0.75) {
           let distanceHalf = (1 - value) / 2;
+          return value + distanceHalf;
+        } else if (value > 0.5) {
+          let distanceHalf = (value - 0.5) / 2;
+          return value - distanceHalf;
+        } else if (value > 0.25) {
+          let distanceHalf = (0.5 - value) / 2;
           return value + distanceHalf;
         } else {
           let distanceHalf = value / 2;
