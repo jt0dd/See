@@ -1,4 +1,5 @@
 import DataSet from "./classes/data-set.js";
+import ImageDataSet from "./classes/image-data-set.js";
 import CompositeNetwork from "./classes/composite-network.js";
 import Network from "./classes/network.js";
 import scoreNet from "./funcs/score-net.js";
@@ -30,11 +31,11 @@ loadJSON("./network-export/network-0.json", response => {
         netArrayWrapped.push(new Network({}, net));
       });
       let compositeNet = new CompositeNetwork(netArrayWrapped);
-      new DataSet(data => {
+      new ImageDataSet(data => {
         //scoreNet(compositeNet, data, {ui: true});
         //testResults(compositeNet);
-        testResultsAccelerated(compositeNet);
-        //visualizeDataSet();
+        //testResultsAccelerated(compositeNet);
+        visualizeDataSet();
       });
     });
   } else {

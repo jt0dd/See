@@ -4,13 +4,21 @@ class FrameProcessor {
     this.kernelSets = {};
     this.filter = [1, 0, 1, 0, 1, 0, 1, 0, 1]; // this should be calculated dynamically and imported to support dynamic filter sizing
   }
-  addScale(dims) {
+  addScale(
+    dims,
+    settings = {
+      pipe: false
+    }
+  ) {
     console.log("Adding scale to FrameProcessor", dims);
 
     let scale = this.gpu
       .createKernel(
         function(image, scale) {
-          const pixel = image[Math.floor(this.thread.y * scale)][Math.floor(this.thread.x * scale)];
+          const pixel =
+            image[Math.floor(this.thread.y * scale)][
+              Math.floor(this.thread.x * scale)
+            ];
           this.color(pixel[0], pixel[1], pixel[2], pixel[3]);
         },
         {
@@ -176,16 +184,13 @@ class FrameProcessor {
     let texture1 = kernelSet.render(scaledImageTexture);
     let texture2 = kernelSet.edge(texture1);
     let texture3 = kernelSet.simplify(texture2);
-    let texture4 = kernelSet.convolute(
-      texture3,
-      this.filter
-    );
+    let texture4 = kernelSet.convolute(texture3, this.filter);
     let texture5 = kernelSet.maxpool(texture4);
     let result = kernelSet.define(texture5);
     let end = performance.now();
     let duration = end - start;
-    console.log('Processing', dims, 'took', duration + "ms");
-    return { scaledImageTexture, result };
+    console.log("Processing", dims, "took", duration + "ms");
+    return {scaledImageTexture, result};
   }
 }
 
