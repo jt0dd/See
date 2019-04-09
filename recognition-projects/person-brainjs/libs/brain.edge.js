@@ -16290,7 +16290,7 @@ module.exports = function (_RunnerBase) {
   * @constructor CPURunner
   *
   * @desc Instantiates a Runner instance for the kernel.
-  * 
+  *
   * @extends RunnerBase
   *
   * @param {Object} settings - Settings to instantiate properties in RunnerBase, with given values
@@ -16313,7 +16313,7 @@ module.exports = function (_RunnerBase) {
   * @name getMode()
   *
   * Return the current mode in which gpu.js is executing.
-  * 
+  *
   * @returns {String} The current mode; "cpu".
   *
   */
@@ -16342,11 +16342,11 @@ module.exports = function () {
   *
   * @desc This handles all the raw state, converted state, etc. of a single function.
   * [INTERNAL] A collection of functionNodes.
-  * 
+  *
   * @prop {Object} nodeMap - Object map, where nodeMap[function] = new FunctionNode;
   * @prop {Object} gpu - The current gpu instance bound to this builder
   * @prop {Object} rootKernel - The root kernel object, contains the paramNames, dimensions etc.
-  * 
+  *
   */
 	function FunctionBuilderBase(gpu) {
 		_classCallCheck(this, FunctionBuilderBase);
@@ -16696,11 +16696,11 @@ module.exports = function () {
 
 	/**
   * @constructor FunctionNodeBase
-  * 
+  *
   * @desc Represents a single function, inside JS, webGL, or openGL.
-  * 
+  *
   * <p>This handles all the raw state, converted state, etc. Of a single function.</p>
-  * 
+  *
   * @prop {String} functionName - Name of the function
   * @prop {Function} jsFunction - The JS Function the node represents
   * @prop {String} jsFunctionString - jsFunction.toString()
@@ -16877,9 +16877,9 @@ module.exports = function () {
 		key: 'getJsFunction',
 
 		/**
-   * 
+   *
    * Core Functions
-   * 
+   *
    */
 
 		/**
@@ -17080,7 +17080,7 @@ module.exports = function () {
    * @function
    * @name getUserParamName
    *
-   * @desc Return the name of the *user parameter*(subKernel parameter) corresponding 
+   * @desc Return the name of the *user parameter*(subKernel parameter) corresponding
    * to the parameter supplied to the kernel
    *
    * @param {String} paramName - Name of the parameter
@@ -17359,9 +17359,9 @@ module.exports = function () {
    *
    * @desc [INTERNAL] pushes a fn parameter onto retArr and 'casts' to int if necessary
    *  i.e. deal with force-int-parameter state
-   * 			
+   *
    * @param {Array} retArr - return array string
-   * @param {String} parameter - the parameter name  
+   * @param {String} parameter - the parameter name
    *
    */
 
@@ -17397,13 +17397,13 @@ module.exports = function () {
 
 	/**
   * @constructor KernelBase
-  * 
-  * @desc Implements the base class for Kernels, and is used as a 
+  *
+  * @desc Implements the base class for Kernels, and is used as a
   * parent class for all Kernel implementations.
   *
-  * This contains the basic methods needed by all Kernel implementations, 
+  * This contains the basic methods needed by all Kernel implementations,
   * like setDimensions, addSubKernel, etc.
-  * 
+  *
   * @prop {Array} paramNames - Name of the parameters of the kernel function
   * @prop {String} fnString - Kernel function as a String
   * @prop {Array} dimensions - Dimensions of the kernel function, this.thread.x, etc.
@@ -17606,7 +17606,7 @@ module.exports = function () {
    *
    * @desc Fix division by factor of 3 FP accuracy bug
    *
-   * @param {Boolean} fix - should fix 
+   * @param {Boolean} fix - should fix
    *
    */
 
@@ -17704,7 +17704,7 @@ module.exports = function () {
    * @name setCanvas
    *
    * @desc Bind the canvas to kernel
-   * 
+   *
    * @param {Canvas} canvas - Canvas to bind
    *
    */
@@ -17722,7 +17722,7 @@ module.exports = function () {
    * @name setCanvas
    *
    * @desc Bind the webGL instance to kernel
-   * 
+   *
    * @param {Canvas} webGL - webGL instance to bind
    *
    */
@@ -17798,7 +17798,7 @@ module.exports = function () {
 			});
 		}
 
-		/** 
+		/**
    * @memberOf KernelBase#
    * @function
    * @name addSubKernel
@@ -17822,7 +17822,7 @@ module.exports = function () {
 			return this;
 		}
 
-		/** 
+		/**
    * @memberOf KernelBase#
    * @function
    * @name addSubKernelProperty
@@ -18102,7 +18102,7 @@ var WebGLFunctionNode = require('../web-gl/function-node');
 var DECODE32_ENCODE32 = /decode32\(\s+encode32\(/g;
 var ENCODE32_DECODE32 = /encode32\(\s+decode32\(/g;
 
-/** 
+/**
  * @class WebGL2FunctionNode
  *
  * @desc [INTERNAL] Takes in a function node, and does all the AST voodoo required to generate its respective webGL code.
@@ -18209,7 +18209,7 @@ module.exports = function (_WebGLFunctionNode) {
  * @name webgl_regex_optimize
  *
  * @desc [INTERNAL] Takes the near final webgl function string, and do regex search and replacments.
- * For voodoo optimize out the following: 
+ * For voodoo optimize out the following:
  *
  * - decode32(encode32( <br>
  * - encode32(decode32( <br>
@@ -19301,7 +19301,7 @@ module.exports = function (_WebGLKernel) {
 		key: 'validateOptions',
 
 
-		/** 
+		/**
    * @memberOf WebGLValidatorKernel#
    * @function
    * @name validateOptions
@@ -22510,7 +22510,7 @@ module.exports = function (_RunnerBase) {
   *
  	 * @extends RunnerBase
   	 * @desc Instantiates a Runner instance for the kernel.
-  * 
+  *
   * @param {Object} settings - Settings to instantiate properties in RunnerBase, with given values
   *
   */
@@ -22530,7 +22530,7 @@ module.exports = function (_RunnerBase) {
   * @name getMode
   *
   * @desc Return the current mode in which gpu.js is executing.
-  * 
+  *
   * @returns {String} The current mode; "cpu".
   *
   */
@@ -22586,7 +22586,7 @@ module.exports = function (_WebGLKernel) {
 		key: 'validateOptions',
 
 
-		/** 
+		/**
    * @memberOf WebGLValidatorKernel#
    * @function
    * @name validateOptions
@@ -22620,7 +22620,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var UtilsCore = require("./utils-core");
 
 /**
- * This is a minimalistic version of GPU.js used 
+ * This is a minimalistic version of GPU.js used
  * to run precompiled GPU.JS code.
  *
  * This intentionally excludes the JS AST compiller : which is 400kb alone/
@@ -22643,7 +22643,7 @@ module.exports = function () {
    * @memberOf GPUCore
    *
    * @description Validates the KernelObj to comply with the defined format
-   * Note that this does only a limited sanity check, and does not  
+   * Note that this does only a limited sanity check, and does not
    * guarantee a full working validation.
    *
    * For the kernel object format see : <kernelObj-format>
@@ -22702,7 +22702,7 @@ module.exports = function () {
    * @param {Object} inOpt - [Optional] the option overrides to use
    *
    * @returns {Function} The kernel function
-   * 
+   *
    */
 
 	}, {
@@ -23175,7 +23175,7 @@ var GPU = function (_GPUCore) {
 		value: function destroy() {
 			var _this2 = this;
 
-			// perform on next runloop - for some reason we dont get lose context events 
+			// perform on next runloop - for some reason we dont get lose context events
 			// if webGl is created and destroyed in the same run loop.
 			setTimeout(function () {
 				var kernels = _this2.kernels;
@@ -23274,7 +23274,7 @@ module.exports = function () {
   * @memberOf Texture#
   *
   * @desc Converts the Texture into a JavaScript Array.
-  * 
+  *
   * @param {Object} The `gpu` Object
   *
   */
@@ -23671,12 +23671,12 @@ module.exports = UtilsCore;
 'use strict';
 
 /**
- * 
+ *
  * @classdesc Various utility functions / snippets of code that GPU.JS uses internally.\
  * This covers various snippets of code that is not entirely gpu.js specific (ie. may find uses elsewhere)
  *
  * Note that all methods in this class are *static* by nature `Utils.functionName()`
- * 
+ *
  * @class Utils
  * @extends UtilsCore
  *
@@ -24173,7 +24173,7 @@ var Utils = function (_UtilsCore) {
    * @static
    *
    * Return the dimension of an array.
-   * 
+   *
    * @param {Array|String} x - The array
    * @param {number} [pad] - To include padding in the dimension calculation [Optional]
    *
