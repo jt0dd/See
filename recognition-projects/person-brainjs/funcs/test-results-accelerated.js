@@ -10,15 +10,9 @@ function testResultsAccelerated(net, i = 0) {
       testResultsAccelerated(net, i);
     }
     if (image.type != "error") {
-      let compositeCanvas = document.createElement("canvas");
-      let compositeContext = compositeCanvas.getContext("2d");
-      compositeCanvas.width = image.width;
-      compositeCanvas.height = image.height;
-      document.getElementById("test-image-container").append(compositeCanvas);
       let steps = 4;
       net.setOutputScales(image, steps);
-
-      let result = net.processFrame(image, compositeContext);
+      let result = net.processFrame(image);
     }
 
     //logger.log('Result', result);
@@ -40,6 +34,18 @@ function testResultsAccelerated(net, i = 0) {
           speedTarget +
           "FPS target";
 
+        allTargets.forEach(target => {
+          rawContext.beginPath();
+          rawContext.lineWidth = "3";
+          rawContext.strokeStyle = "#40dd35";
+          rawContext.rect(
+            Math.round(target[0] * target[2]),
+            Math.round(target[1] * target[2]),
+            25 * target[2],
+            25 * target[2]
+          );
+          rawContext.stroke();
+        });
         */
   });
 }

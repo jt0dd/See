@@ -10,19 +10,28 @@ let processed;
 
 class Network {
   constructor(config, net) {
+    this.processTime = 0;
     if (net) {
-      this.net = new brain.NeuralNetworkGPU();
+      this.net = new brain.NeuralNetwork();
       this.net = this.net.fromJSON(net)
     } else {
-      this.net = new brain.NeuralNetworkGPU(config);
+      this.net = new brain.NeuralNetwork(config);
     }
   }
-  run(input, x, y, inputSqrt) {
+  process(imageData) {
     start = performance.now();
-    return this.net.run(input);
+    processed = edge(imageData, 25, 25, 24);
+    processed = simplify(processed, 50);
+    processed = convolute(processed);
+    processed = extrude(processed);
     end = performance.now();
     duration = end - start;
-    this.processTime = duration;
+    this.processTime += duration;
+    return processed;
+  }
+  run(input) {
+    this.processTime = 0;
+    return this.net.run(this.process(input));
   }
   train(dataSet, config, callback) {
     let trainingData = [];

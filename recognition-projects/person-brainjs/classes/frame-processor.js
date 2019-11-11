@@ -1,10 +1,6 @@
 class FrameProcessor {
-  constructor(gpu) {
-    if (gpu) {
-      this.gpu = gpu;
-    } else {
-      this.gpu = new GPU();
-    }
+  constructor() {
+    this.gpu = new GPU();
     this.kernelSets = {};
     this.filter = [1, 0, 1, 0, 1, 0, 1, 0, 1]; // this should be calculated dynamically and imported to support dynamic filter sizing
   }
@@ -48,58 +44,23 @@ class FrameProcessor {
     let edge = this.gpu
       .createKernel(
         function(texture) {
-          let threshold = 12 / 255;
+          let threshold = 24 / 255;
           let sourcePixel = texture[this.thread.y][this.thread.x];
-          let sourceOption1 = sourcePixel[0];
-          let sourceOption2 = sourcePixel[1];
-          let sourceOption3 = sourcePixel[2];
-          let sourceOption4 = (sourcePixel[0] + sourcePixel[1]) / 2;
-          let sourceOption5 = (sourcePixel[0] + sourcePixel[2]) / 2;
-          let sourceOption6 = (sourcePixel[1] + sourcePixel[2]) / 2;
-          let sourceOption7 =
+          let sourceAverage =
             (sourcePixel[0] + sourcePixel[1] + sourcePixel[2]) / 3;
+
           let flag = 1;
           for (let subX = -1; subX <= 0; subX++) {
             for (let subY = -1; subY <= 0; subY++) {
               let choice = Math.random();
               let targetPixel =
                 texture[this.thread.y + subY][this.thread.x + subX];
-              let targetOption1 = targetPixel[0];
-              let targetOption2 = targetPixel[1];
-              let targetOption3 = targetPixel[2];
-              let targetOption4 = (targetPixel[0] + targetPixel[1]) / 2;
-              let targetOption5 = (targetPixel[0] + targetPixel[2]) / 2;
-              let targetOption6 = (targetPixel[1] + targetPixel[2]) / 2;
-              let targetOption7 =
+              let targetAverage =
                 (targetPixel[0] + targetPixel[1] + targetPixel[2]) / 3;
-              let difference1 = Math.abs(targetOption1 - sourceOption1);
-              let difference2 = Math.abs(targetOption2 - sourceOption2);
-              let difference3 = Math.abs(targetOption3 - sourceOption3);
-              let difference4 = Math.abs(targetOption4 - sourceOption4);
-              let difference5 = Math.abs(targetOption5 - sourceOption5);
-              let difference6 = Math.abs(targetOption6 - sourceOption6);
-              let difference7 = Math.abs(targetOption7 - sourceOption7);
-              let difference = difference1;
-              //let difference = Math.min(difference1, difference2, difference3, difference4); // feature broken
-              if (difference2 < difference) {
-                difference = difference2;
-              }
-              if (difference3 < difference) {
-                difference = difference3;
-              }
-              if (difference4 < difference) {
-                difference = difference4;
-              }
-              if (difference5 < difference) {
-                difference = difference5;
-              }
-              if (difference6 < difference) {
-                difference = difference6;
-              }
-              if (difference7 < difference) {
-                difference = difference7;
-              }
-              if (difference > threshold && choice > 0.1) {
+              if (
+                Math.abs(targetAverage - sourceAverage) > threshold &&
+                choice > 0.25
+              ) {
                 this.color(0, 0, 0, 1);
                 flag = 0;
                 subY++;
@@ -194,27 +155,22 @@ class FrameProcessor {
       .setOutput([dims.w - 4, dims.h - 4]);
 
     let define = this.gpu
-      .createKernel(
-        function(texture) {
-          let value = texture[this.thread.y][this.thread.x];
-          if (value > 0.75) {
-            let distanceHalf = (1 - value) / 2;
-            return value + distanceHalf;
-          } else if (value > 0.5) {
-            let distanceHalf = (value - 0.5) / 2;
-            return value - distanceHalf;
-          } else if (value > 0.2) {
-            let distanceHalf = (0.5 - value) / 2;
-            return value + distanceHalf;
-          } else {
-            let distanceHalf = value / 2;
-            return value - distanceHalf;
-          }
-        },
-        {
-          pipeline: settings.pipe
+      .createKernel(function(texture) {
+        let value = texture[this.thread.y][this.thread.x];
+        if (value > 0.75) {
+          let distanceHalf = (1 - value) / 2;
+          return value + distanceHalf;
+        } else if (value > 0.5) {
+          let distanceHalf = (value - 0.5) / 2;
+          return value - distanceHalf;
+        } else if (value > 0.25) {
+          let distanceHalf = (0.5 - value) / 2;
+          return value + distanceHalf;
+        } else {
+          let distanceHalf = value / 2;
+          return value - distanceHalf;
         }
-      )
+      })
       .setOutput([dims.w - 4, dims.h - 4]);
 
     if (!this.kernelSets[dims.w]) this.kernelSets[dims.w] = {};
@@ -240,7 +196,7 @@ class FrameProcessor {
     let end = performance.now();
     let duration = end - start;
     console.log("Processing", dims, "took", duration + "ms");
-    return result;
+    return {scaledImageTexture, result};
   }
 }
 

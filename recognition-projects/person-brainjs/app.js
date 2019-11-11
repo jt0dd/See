@@ -34,7 +34,7 @@ loadJSON("./network-export/network-0.json", response => {
       new ImageDataSet(data => {
         //scoreNet(compositeNet, data, {ui: true});
         //testResults(compositeNet);
-        testResultsAccelerated(compositeNet);
+        //testResultsAccelerated(compositeNet);
         visualizeDataSet();
       });
     });

@@ -9,21 +9,7 @@ class CompositeNetwork {
     this.networkArray = networkArray;
     this.trainee = false;
     this.processTime = 0;
-    this.kernels = {};
-  }
-  setFrameProcessor() {
-    if (
-      this.networkArray[0] &&
-      this.networkArray[0].net &&
-      this.networkArray[0].net.gpu
-    ) {
-      this.gpu = this.networkArray[0].net.gpu;
-      logger.log("Established shared GPU:", this.gpu);
-      this.frameProcessor = new FrameProcessor(this.gpu);
-    } else {
-      console.log("this.networkArray[0]", this.networkArray[0]);
-      throw "Called setFrameProcessor before establishing a network to share a GPU with!";
-    }
+    this.frameProcessor = new FrameProcessor();
   }
   export() {
     let results = [];
@@ -40,9 +26,6 @@ class CompositeNetwork {
     logger.log("Imported network", this.networkArray);
   }
   setOutputScales(image, steps) {
-    if (!this.frameProcessor) {
-      this.setFrameProcessor();
-    }
     let imageWidth = image.width;
     let imageHeight = image.height;
     let prevDims = {w: imageWidth, h: imageHeight};
@@ -61,126 +44,55 @@ class CompositeNetwork {
       this.frameProcessor.addScale(dims);
     }
   }
-  processFrame(image, compositeContext) {
-    logger.log("Processing frame...");
-    let imageWidth = image.width;
-    let imageHeight = image.height;
-    let lastScale = 1;
-    let start = performance.now();
-    let prevDims = {w: imageWidth, h: imageHeight};
-    let frameCount = 0;
-    let allTargets = [];
-    let passingOutputDuration = 0;
-    for (let percent = 100; percent >= this.step; percent -= this.step) {
-      frameCount++;
-      let percentScale = percent / 100;
-      let adjustedScale = percentScale / lastScale;
-      lastScale = percentScale;
-      let newWidth = Math.round(imageWidth * adjustedScale);
-      let newHeight = Math.round(imageHeight * adjustedScale);
-      let dims = {w: newWidth, h: newHeight};
-      let scale = prevDims.w / dims.w;
-      prevDims = dims;
-      let resultTexture = this.frameProcessor.process(image, dims, scale);
-      logger.log("resultTexture", resultTexture);
-      let chunkSize = 15;
-      let inputSize = this.networkArray[0].net.sizes[0];
-      if (!this.kernels[inputSize]) {
-        this.kernels[inputSize] = this.gpu
-          .createKernel(
-            function(texture, x, y, inputSqrt) {
-              let xOffset = this.thread.x % inputSqrt;
-              let yOffset = Math.round(this.thread.x / inputSqrt);
-              let value = texture[x + xOffset][y + yOffset];
-              return value;
-            },
-            {
-              //pipeline: true
-            }
-          )
-          .setOutput([inputSize]);
-      }
-      console.log("net", this.networkArray[0].net);
-      let inputSqrt = Math.round(Math.sqrt(inputSize));
-      logger.log("inputSize", inputSize);
-      logger.log("inputSqrt", inputSqrt);
-      let targets = [];
-      let inputStart = performance.now();
-      let runtimeDuration = 0;
-      for (let x = 0; x < image.width - 4 - chunkSize; x += chunkSize) {
-        for (let y = 0; y < image.height - 4 - chunkSize; y += chunkSize) {
-          console.log(
-            "resultTexture, x, y, inputSqrt",
-            resultTexture,
-            x,
-            y,
-            inputSqrt
-          );
-          let inputTexture = this.kernels[inputSize](
-            resultTexture,
-            x,
-            y,
-            inputSqrt
-          );
-          console.log("inputTexture", inputTexture);
-          //let input =
-          /*
-            if (this.run(resultTexture, x, y, inputSqrt) === 1) {
-              targets.push([x, y]);
-              allTargets.push([x, y, 1 + (1 - percentScale)]);
-            }
+  processFrame(image) {
+    if (this.frameProcessor) {
+      logger.log("Processing frame...");
+      let imageWidth = image.width;
+      let imageHeight = image.height;
+      let lastScale = 1;
+      let start = performance.now();
+      let prevDims = {w: imageWidth, h: imageHeight};
+      let frameCount = 0;
+      for (let percent = 100; percent >= this.step; percent -= this.step) {
+        frameCount++;
+        let percentScale = percent / 100;
+        let adjustedScale = percentScale / lastScale;
+        lastScale = percentScale;
+        let newWidth = Math.round(imageWidth * adjustedScale);
+        let newHeight = Math.round(imageHeight * adjustedScale);
+        let dims = {w: newWidth, h: newHeight};
+        let scale = prevDims.w / dims.w;
+        prevDims = dims;
+        let result = this.frameProcessor.process(image, dims, scale);
+        logger.log("result", result);
+
+        /*
+            targets.forEach(target => {
+              ctx.beginPath();
+              ctx.lineWidth = "2";
+              ctx.strokeStyle = "#40dd35";
+              ctx.rect(target[0], target[1], 25, 25);
+              ctx.stroke();
+            });
             */
-        }
       }
-      let inputEnd = performance.now();
-      let duration = inputEnd - inputStart;
-      passingOutputDuration += duration;
-
-      let subsetContext = false;
-      if (subsetContext) {
-        targets.forEach(target => {
-          subsetContext.beginPath();
-          subsetContext.lineWidth = "2";
-          subsetContext.strokeStyle = "#40dd35";
-          subsetContext.rect(target[0], target[1], inputSqrt, inputSqrt);
-          subsetContext.stroke();
-        });
-      }
-
-      if (compositeContext) {
-        allTargets.forEach(target => {
-          compositeContext.beginPath();
-          compositeContext.lineWidth = "2";
-          compositeContext.strokeStyle = "#40dd35";
-          compositeContext.rect(
-            target[0],
-            target[1],
-            inputSqrt * target[3],
-            inputSqrt * target[3]
-          );
-          compositeContext.stroke();
-        });
-      }
+      let end = performance.now();
+      let duration = end - start;
+      logger.log(
+        "Processing frame complete with avg duration of",
+        duration / frameCount + "ms and a total duration of",
+        duration + "ms"
+      );
+    } else {
+      throw "Attempted to process frame before setting output scales!";
     }
-    console.log(
-      "Passing output duration for frame:",
-      passingOutputDuration,
-      "ms "
-    );
-    let end = performance.now();
-    let duration = end - start;
-    logger.log(
-      "Processing frame complete with avg duration of",
-      duration / frameCount + "ms and a total duration of",
-      duration + "ms"
-    );
   }
-  run(input, x, y, inputSqrt) {
+  run(input) {
     let result = 0;
     this.processTime = 0;
     this.networkArray.forEach(network => {
       if (result === 0) {
-        result = Math.round(network.run(input, x, y, inputSqrt)[0]);
+        result = Math.round(network.run(input)[0]);
         //console.log("network.processTime", network.processTime);
         this.processTime += network.processTime;
       }
