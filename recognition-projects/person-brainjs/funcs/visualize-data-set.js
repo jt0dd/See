@@ -20,56 +20,26 @@ function flattenData(data) {
   return result;
 }
 
-function normalizeColorData(data) {
+function extrapolateColorData(data) {
   let result = [];
   data.forEach(val => {
-    result.push(val / 5);
-  });
-  return result;
-}
-
-function extendColorData(data) {
-  let result = [];
-  data.forEach(val => {
-    result.push(val);
-    result.push(val);
-    result.push(val);
+    result.push(val * 255);
+    result.push(val * 255);
+    result.push(val * 255);
     result.push(255);
   });
   return result;
 }
 
-function extrapolateColorData(data) {
-  let result = [];
-  data.forEach(val => {
-    result.push(Math.floor(val * 255));
-  });
-  return result;
-}
-
-function render(data, display, settings = {
-  extrapolate : false,
-  extend: false,
-  flatten: false,
-  normalize: false
-}) {
-  if (settings.flatten) {
+function render(data, display, extrap = true, flatten = false) {
+  if (flatten) {
     data = flattenData(data);
-    //logger.log('Flattened data:', data);
+    logger.log('Flattened data:', data);
   }
-  if (settings.normalize) {
-    data = normalizeColorData(data);
-    //logger.log('Normalized data:', data);
-  }
-  if (settings.extrapolate) {
+  if (extrap) {
     data = extrapolateColorData(data);
-    //logger.log('Extrapolated data:', data);
+    logger.log('Extrapolated data:', data);
   }
-  if (settings.extend) {
-    data = extendColorData(data);
-    //logger.log('Extended data:', data);
-  }
-
   let size = Math.round(Math.sqrt(data.length / 4));
   let clamped = new Uint8ClampedArray(data);
   let processedImgData = new ImageData(clamped, size);
@@ -158,64 +128,43 @@ function visualizeDataSet(callback, max = Infinity) {
         display.className = "true";
 
         let texture = kerelSet.render(img);
-        //console.log("[render] texture", texture);
+        console.log("[render] texture", texture);
         let pixels = new Uint8Array(texture.context.drawingBufferWidth * texture.context.drawingBufferHeight * 4);
         texture.context.readPixels(0, 0, texture.context.drawingBufferWidth, texture.context.drawingBufferHeight, texture.context.RGBA, texture.context.UNSIGNED_BYTE, pixels);
-        //console.log("pixels", pixels);
-        render(pixels, display, {
-          flatten: false,
-          normalize: false,
-          extrapolate : false,
-          extend: false
-        });
+        console.log("pixels", pixels);
+        render(pixels, display, false, false);
 
         texture = kerelSet.edge(texture);
-        //console.log("[edge] texture", texture);
+        console.log("[edge] texture", texture);
         pixels = new Uint8Array(texture.context.drawingBufferWidth * texture.context.drawingBufferHeight * 4);
         texture.context.readPixels(0, 0, texture.context.drawingBufferWidth, texture.context.drawingBufferHeight, texture.context.RGBA, texture.context.UNSIGNED_BYTE, pixels);
-        //console.log("pixels", pixels);
-        render(pixels, display, {
-          flatten: false,
-          normalize: false,
-          extrapolate : false,
-          extend: false
-        });
+        console.log("pixels", pixels);
+        render(pixels, display, false, false);
 
-        pixels = kerelSet.simplify(texture);
-        //console.log("[simplify] pixels", pixels);
-        render(pixels, display, {
-          flatten: true,
-          normalize: false,
-          extrapolate : true,
-          extend: true
-        });
+        texture = kerelSet.simplify(texture);
+        console.log("[simplify] texture", texture);
+        pixels = new Uint8Array(texture.context.drawingBufferWidth * texture.context.drawingBufferHeight * 4);
+        texture.context.readPixels(0, 0, texture.context.drawingBufferWidth, texture.context.drawingBufferHeight, texture.context.RGBA, texture.context.UNSIGNED_BYTE, pixels);
+        console.log("pixels", pixels);
+        render(pixels, display, true, false);
 
-        pixels = kerelSet.convolute(pixels, filter);
-        //console.log("[convolute] pixels", pixels);
-        render(pixels, display, {
-          flatten: true,
-          normalize: true,
-          extrapolate : true,
-          extend: true
-        });
+        texture = kerelSet.convolute(texture, filter);
+        console.log("[convolute] texture", texture);
+        pixels = new Uint8Array(texture.context.drawingBufferWidth * texture.context.drawingBufferHeight * 4);
+        texture.context.readPixels(0, 0, texture.context.drawingBufferWidth, texture.context.drawingBufferHeight, texture.context.RGBA, texture.context.UNSIGNED_BYTE, pixels);
+        console.log("pixels", pixels);
+        render(pixels, display, true, false);
 
-        pixels = kerelSet.maxpool(pixels);
-        //console.log("[maxpool] pixels", pixels);
-        render(pixels, display, {
-          flatten: true,
-          normalize: false,
-          extrapolate : true,
-          extend: true
-        });
+        texture = kerelSet.maxpool(texture);
+        console.log("[maxpool] texture", texture);
+        pixels = new Uint8Array(texture.context.drawingBufferWidth * texture.context.drawingBufferHeight * 4);
+        texture.context.readPixels(0, 0, texture.context.drawingBufferWidth, texture.context.drawingBufferHeight, texture.context.RGBA, texture.context.UNSIGNED_BYTE, pixels);
+        console.log("pixels", pixels);
+        render(pixels, display, true, false);
 
-        pixels = kerelSet.define(pixels);
-        //console.log("[define] pixels", pixels);
-        render(pixels, display, {
-          flatten: true,
-          normalize: false,
-          extrapolate : true,
-          extend: true
-        });
+        pixels = kerelSet.define(texture);
+        console.log("[define] pixels", pixels);
+        render(pixels, display, true, false);
 
         container.append(display);
       });
